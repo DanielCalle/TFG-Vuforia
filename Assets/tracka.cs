@@ -1,5 +1,6 @@
 ﻿using Vuforia;
 using UnityEngine;
+using TMPro;
 public class tracka : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
@@ -45,20 +46,21 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
     // Here we handle a cloud target recognition event
     public void OnNewSearchResult(TargetFinder.TargetSearchResult targetSearchResult)
     {
-        TargetFinder.TargetSearchResult cloudRecoSearchResult =
-            (TargetFinder.TargetSearchResult)targetSearchResult;
+        //TargetFinder.TargetSearchResult cloudRecoSearchResult = (TargetFinder.TargetSearchResult)targetSearchResult;
         // do something with the target metadata
         //mTargetMetadata = cloudRecoSearchResult.MetaData;
         // stop the target finder (i.e. stop scanning the cloud)
-        mCloudRecoBehaviour.CloudRecoEnabled = false;
+        //mCloudRecoBehaviour.CloudRecoEnabled = false;
         // Build augmentation based on target
-        if (ImageTargetTemplate)
+        
+        ImageTargetBehaviour itb = Instantiate(ImageTargetTemplate);
+
+        if (itb)
         {
             // enable the new result with the same ImageTargetBehaviour:
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-            ImageTargetBehaviour imageTargetBehaviour =
-             (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
-             targetSearchResult, ImageTargetTemplate.gameObject);
+            ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, itb.gameObject);
+            imageTargetBehaviour.GetComponentInChildren<TextMeshPro>().text = imageTargetBehaviour.TrackableName;
         }
     }
 
