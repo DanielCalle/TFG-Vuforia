@@ -68,6 +68,7 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
 
+            //fillData(new JSONObject(""));
             StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
         }
     }
