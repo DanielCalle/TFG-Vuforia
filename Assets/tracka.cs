@@ -54,28 +54,28 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
         // stop the target finder (i.e. stop scanning the cloud)
         //mCloudRecoBehaviour.CloudRecoEnabled = false;
         // Build augmentation based on target
-        
-        ImageTargetBehaviour itb = Instantiate(ImageTargetTemplate);
 
-        if (itb)
+        ImageTargetBehaviour cloneImageTargetBehaviour = Instantiate(ImageTargetTemplate);
+
+        if (cloneImageTargetBehaviour)
         {
             // enable the new result with the same ImageTargetBehaviour:
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-            ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, itb.gameObject);
+            ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
             imageTargetBehaviour.GetComponentInChildren<TextMeshPro>().text = imageTargetBehaviour.TrackableName;
 
             Button button = imageTargetBehaviour.GetComponentInChildren<Canvas>().GetComponentInChildren<Button>();
-            button.onClick.AddListener(() => {
-                Debug.Log("dkajdkwdkjahdw");
+            button.onClick.AddListener(() =>
+            {
+                VideoPlayer videoPlayer = imageTargetBehaviour.GetComponentInChildren<VideoPlayer>();
+                videoPlayer.Play();
             });
 
-            VideoPlayer videoPlayer = imageTargetBehaviour.GetComponentInChildren<VideoPlayer>();
-            videoPlayer.Play();
         }
     }
 
     void OnGUI()
     {
-        
+
     }
 }
