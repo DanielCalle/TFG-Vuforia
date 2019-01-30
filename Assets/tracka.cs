@@ -3,13 +3,18 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Video;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Networking;
+using System.Text;
+using System;
 public class tracka : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
     // Use this for initialization
-    public ImageTargetBehaviour ImageTargetTemplate;
+    public ImageTargetBehaviour ImageTargetTemplate, instance;
     void Start()
     {
         // register this event handler at the cloud reco behaviour
@@ -61,16 +66,42 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
         {
             // enable the new result with the same ImageTargetBehaviour:
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-            ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
-            imageTargetBehaviour.GetComponentInChildren<TextMeshPro>().text = imageTargetBehaviour.TrackableName;
+            instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
 
-            Button button = imageTargetBehaviour.GetComponentInChildren<Canvas>().GetComponentInChildren<Button>();
-            button.onClick.AddListener(() =>
+            StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
+        }
+    }
+
+    private void fillData(JSONObject json)
+    {
+        TextMeshPro text = instance.GetComponentInChildren<TextMeshPro>();
+        text.text = instance.TrackableName;
+
+        Button button = instance.GetComponentInChildren<Canvas>().GetComponentInChildren<Button>();
+        button.onClick.AddListener(() =>
+        {
+            VideoPlayer videoPlayer = instance.GetComponentInChildren<VideoPlayer>();
+            videoPlayer.Play();
+        });
+    }
+
+    IEnumerator GetFilmData(String id)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("uuid", id);
+
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000", form))
+        {
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
             {
-                VideoPlayer videoPlayer = imageTargetBehaviour.GetComponentInChildren<VideoPlayer>();
-                videoPlayer.Play();
-            });
-
+                Debug.Log(www.error);
+            }
+            else
+            {
+                fillData(new JSONObject(www.downloadHandler.text));
+                Debug.Log("Received: " + www.downloadHandler.text);
+            }
         }
     }
 
