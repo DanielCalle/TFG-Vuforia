@@ -1,6 +1,7 @@
 ﻿using Vuforia;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Video;
 public class tracka : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
@@ -61,6 +62,9 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, itb.gameObject);
             imageTargetBehaviour.GetComponentInChildren<TextMeshPro>().text = imageTargetBehaviour.TrackableName;
+
+            VideoPlayer videoPlayer = imageTargetBehaviour.GetComponentInChildren<VideoPlayer>();
+            videoPlayer.Play();
         }
     }
 
