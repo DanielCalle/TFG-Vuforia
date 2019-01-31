@@ -13,6 +13,8 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
+    private bool reproducing = false;
+    public Button m_PlayButton;
     // Use this for initialization
     public ImageTargetBehaviour ImageTargetTemplate, instance;
     void Start()
@@ -80,26 +82,6 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
         
         TextMeshPro description = instance.transform.Find("Description").GetComponent<TextMeshPro>();
         description.text = json.GetField("description").str;
-
-        VideoPlayer videoPlayer = instance.transform.Find("Trailer").GetComponent<VideoPlayer>();
-
-        Button playButton = instance.transform.Find("Canvas/PlayButton").GetComponent<Button>();
-        playButton.onClick.AddListener(() =>
-        {
-            videoPlayer.Play();
-        });
-
-        Button stopButton = instance.transform.Find("Canvas/StopButton").GetComponent<Button>();
-        stopButton.onClick.AddListener(() =>
-        {
-            videoPlayer.Stop();
-        });
-
-        Button pauseButton = instance.transform.Find("Canvas/PauseButton").GetComponent<Button>();
-        pauseButton.onClick.AddListener(() =>
-        {
-            videoPlayer.Pause();
-        });
     }
 
     IEnumerator GetFilmData(String id)
@@ -121,6 +103,7 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
+
 
     void OnGUI()
     {
