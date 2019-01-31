@@ -68,15 +68,18 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
 
-            fillData(new JSONObject(""));
-            //StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
+            //fillData(new JSONObject(""));
+            StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
         }
     }
 
     private void fillData(JSONObject json)
     {
-        TextMeshPro text = instance.transform.Find("Title").GetComponent<TextMeshPro>();
-        text.text = instance.TrackableName;
+        TextMeshPro title = instance.transform.Find("Title").GetComponent<TextMeshPro>();
+        title.text = json.GetField("title").ToString();
+        
+        TextMeshPro description = instance.transform.Find("Description").GetComponent<TextMeshPro>();
+        description.text = json.GetField("description").ToString();
 
         VideoPlayer videoPlayer = instance.transform.Find("Trailer").GetComponent<VideoPlayer>();
 
@@ -90,6 +93,12 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
         stopButton.onClick.AddListener(() =>
         {
             videoPlayer.Stop();
+        });
+
+        Button pauseButton = instance.transform.Find("Canvas/PauseButton").GetComponent<Button>();
+        pauseButton.onClick.AddListener(() =>
+        {
+            videoPlayer.Pause();
         });
     }
 
@@ -107,8 +116,8 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             }
             else
             {
-                fillData(new JSONObject(www.downloadHandler.text));
                 Debug.Log("Received: " + www.downloadHandler.text);
+                fillData(new JSONObject(www.downloadHandler.text));
             }
         }
     }
