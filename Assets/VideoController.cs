@@ -40,12 +40,9 @@ public class VideoController : MonoBehaviour
 
     void Update()
     {
-
         if (videoPlayer.isPlaying)
         {
             ShowButton(this.m_PlayButton,false);
-            Debug.Log("hola");
-
         }
         else
         {

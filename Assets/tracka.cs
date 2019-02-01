@@ -77,9 +77,8 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
 
     private void fillData(JSONObject json)
     {
-        Debug.Log(json);
         TextMeshPro title = instance.transform.Find("Title").GetComponent<TextMeshPro>();
-        title.text = json.GetField("title").str;
+        title.text = json.GetField("name").str;
         
         TextMeshPro description = instance.transform.Find("Description").GetComponent<TextMeshPro>();
         description.text = "Sinopsis: " + json.GetField("description").str;
@@ -91,10 +90,7 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
 
     IEnumerator GetFilmData(String id)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("uuid", id);
-
-        using (UnityWebRequest www = UnityWebRequest.Post("https://filmar.herokuapp.com/", form))
+        using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
         {
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError)
