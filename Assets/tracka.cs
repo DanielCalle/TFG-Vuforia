@@ -110,4 +110,11 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
     {
 
     }
+    public void onClick()
+    {
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+
+        jo.Call("back");
+    }
 }
