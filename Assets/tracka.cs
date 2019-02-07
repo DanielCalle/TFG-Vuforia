@@ -77,14 +77,14 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
 
     private void fillData(JSONObject json)
     {
-        TextMeshPro title = instance.transform.Find("Title").GetComponent<TextMeshPro>();
+        TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
         title.text = json.GetField("name").str;
         
-        TextMeshPro description = instance.transform.Find("Description").GetComponent<TextMeshPro>();
+        TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
         description.text = "Sinopsis: " + json.GetField("description").str;
 
-        TextMeshPro puntuacion = instance.transform.Find("Puntuacion").GetComponent<TextMeshPro>();
-        puntuacion.text = "7.2/10";
+        TextMeshPro puntuacion = instance.transform.Find("Canvas/Puntuacion").GetComponent<TextMeshPro>();
+        puntuacion.text = json.GetField("valoration") + "/10";
         puntuacion.color = Color.yellow;
     }
 
