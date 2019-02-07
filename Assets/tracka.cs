@@ -15,6 +15,7 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
     private string mTargetMetadata = "";
     private bool reproducing = false;
     public Button m_PlayButton;
+    private String id ="";
     // Use this for initialization
     public ImageTargetBehaviour ImageTargetTemplate, instance;
     void Start()
@@ -69,9 +70,9 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             // enable the new result with the same ImageTargetBehaviour:
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
-
+            this.id = targetSearchResult.UniqueTargetId;
             //fillData(new JSONObject(""));
-            StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
+            StartCoroutine(GetFilmData(this.id));
         }
     }
 
@@ -104,17 +105,30 @@ public class tracka : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
-
-
     void OnGUI()
     {
 
     }
-    public void onClick()
+    public void planClick()
     {
-        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-
-        jo.Call("back");
+        comunication("plan", this.id );
+    }
+    public void likeClick()
+    {
+        comunication("like", this.id );
+    }
+    public void shareClick()
+    {
+        comunication("share", this.id );
+    }
+    private void comunication(String method, String _id)
+    {
+        using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                jo.Call(method, _id);
+            }
+        }
     }
 }
