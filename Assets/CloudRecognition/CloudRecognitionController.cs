@@ -69,27 +69,88 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             // enable the new result with the same ImageTargetBehaviour:
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+            
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
+
+            setControllers();
+
             this.id = targetSearchResult.UniqueTargetId;
-            //fillData(new JSONObject(""));
             StartCoroutine(GetFilmData(this.id));
         }
+    }
+
+    private void setControllers()
+    {
+        Canvas leftPanel = instance.transform.Find("Canvas/LeftPanel").GetComponent<Canvas>();
+        Canvas rightPanel = instance.transform.Find("Canvas/RightPanel").GetComponent<Canvas>();
+
+        showHide(leftPanel.gameObject, false);
+        showHide(rightPanel.gameObject, false);
+
+        Button leftArrow = instance.transform.Find("Canvas/LeftArrowButton").GetComponent<Button>();
+        Button rightArrow = instance.transform.Find("Canvas/RightArrowButton").GetComponent<Button>();
+
+        leftArrow.onClick.AddListener(() =>
+        {
+            showHide(leftPanel.gameObject);
+        });
+        rightArrow.onClick.AddListener(() =>
+        {
+            showHide(rightPanel.gameObject);
+        });
+
+        TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
+        showHide(title.gameObject, false);
+
+        TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
+        showHide(description.gameObject, false);
+
+        TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
+        showHide(punctuation.gameObject, false);
+    }
+
+    private void showHide(GameObject gameObject)
+    {
+        this.showHide(gameObject, !gameObject.activeSelf);
+    }
+
+    private void showHide(GameObject gameObject, bool active) {
+        gameObject.SetActive(active);
     }
 
     private void fillData(JSONObject json)
     {
         TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
+        showHide(title.gameObject, true);
         title.text = json.GetField("name").str;
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
+        showHide(description.gameObject, true);
         description.text = "Sinopsis: " + json.GetField("description").str;
 
-        TextMeshPro puntuacion = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
-        puntuacion.text = json.GetField("valoration") + "/10";
-        puntuacion.color = Color.yellow;
+        TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
+        showHide(punctuation.gameObject, true);
+
+        float valoration = json.GetField("valoration").n;
+        punctuation.text = valoration + "/10";
+
+        punctuation.color = Color.red;
+        if (valoration >= 5)
+        {
+            punctuation.color = Color.yellow;
+        }
+        if (valoration >= 8)
+        {
+            punctuation.color = Color.green;
+        }
+        if (valoration >= 10)
+        {
+            punctuation.color = Color.white;
+        }
+
     }
 
-    IEnumerator GetFilmData(String id)
+    private IEnumerator GetFilmData(String id)
     {
         using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
         {
