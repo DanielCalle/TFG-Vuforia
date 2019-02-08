@@ -12,12 +12,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
-    private string mTargetMetadata = "";
-    private bool reproducing = false;
-    public Button m_PlayButton;
+    // Last id for the image recognized
     private String id = "";
-    // Use this for initialization
-    public ImageTargetBehaviour ImageTargetTemplate, instance;
+    // Original copy
+    public ImageTargetBehaviour imageTargetTemplate;
+    // Instances for th original
+    private ImageTargetBehaviour instance;
     void Start()
     {
         // register this event handler at the cloud reco behaviour
@@ -48,7 +48,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         if (scanning)
         {
             // clear all known trackables
-            var tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+            ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             tracker.TargetFinder.ClearTrackables(false);
         }
     }
@@ -56,14 +56,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     // Here we handle a cloud target recognition event
     public void OnNewSearchResult(TargetFinder.TargetSearchResult targetSearchResult)
     {
-        //TargetFinder.TargetSearchResult cloudRecoSearchResult = (TargetFinder.TargetSearchResult)targetSearchResult;
-        // do something with the target metadata
-        //mTargetMetadata = cloudRecoSearchResult.MetaData;
-        // stop the target finder (i.e. stop scanning the cloud)
-        //mCloudRecoBehaviour.CloudRecoEnabled = false;
-        // Build augmentation based on target
-
-        ImageTargetBehaviour cloneImageTargetBehaviour = Instantiate(ImageTargetTemplate);
+        // We do clone an instance for each image recognized
+        ImageTargetBehaviour cloneImageTargetBehaviour = Instantiate(imageTargetTemplate);
 
         if (cloneImageTargetBehaviour)
         {
@@ -152,6 +146,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private IEnumerator GetFilmData(String id)
     {
+        // Rest GET to get data about the film
         using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
         {
             yield return www.SendWebRequest();
