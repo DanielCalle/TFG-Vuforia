@@ -10,14 +10,8 @@ public class VideoController : MonoBehaviour
     #region PRIVATE_MEMBERS
 
     private VideoPlayer videoPlayer;
-
-    #endregion //PRIVATE_MEMBERS
-
-
-    #region PUBLIC_MEMBERS
-
-    public Button m_PlayButton;
-    public Button m_PauseButton;
+    private Button playButton;
+    private Button pauseButton;
     #endregion //PRIVATE_MEMBERS
 
 
@@ -25,8 +19,13 @@ public class VideoController : MonoBehaviour
 
     void Start()
     {
+
         videoPlayer = GetComponent<VideoPlayer>();
-        ShowButton(this.m_PauseButton, false);
+
+        playButton = videoPlayer.transform.Find("PlayButton").GetComponent<Button>();
+        pauseButton = videoPlayer.transform.Find("PauseButton").GetComponent<Button>();
+
+        Utility.showHide(pauseButton.gameObject, false);
 
         // Setup Delegates
         videoPlayer.errorReceived += HandleVideoError;
@@ -40,14 +39,8 @@ public class VideoController : MonoBehaviour
 
     void Update()
     {
-        if (videoPlayer.isPlaying)
-        {
-            ShowButton(this.m_PlayButton,false);
-        }
-        else
-        {
-            ShowButton(this.m_PlayButton, true);
-        }
+        Utility.showHide(playButton.gameObject, !videoPlayer.isPlaying);
+        Utility.showHide(pauseButton.gameObject, videoPlayer.isPlaying);
     }
 
     void OnApplicationPause(bool pause)
@@ -64,11 +57,13 @@ public class VideoController : MonoBehaviour
 
     public void Play()
     {
-        Debug.Log("Play Video");
-        //PauseAudio(false);
-        videoPlayer.Play();
-        ShowButton(this.m_PlayButton, false);
-        ShowButton(this.m_PauseButton, true);
+        if (videoPlayer)
+        {
+            Debug.Log("Play Video");
+            videoPlayer.Play();
+            Utility.showHide(playButton.gameObject, false);
+            Utility.showHide(pauseButton.gameObject, true);
+        }
     }
 
     public void Pause()
@@ -76,10 +71,9 @@ public class VideoController : MonoBehaviour
         if (videoPlayer)
         {
             Debug.Log("Pause Video");
-            //PauseAudio(true);
             videoPlayer.Pause();
-            ShowButton(this.m_PlayButton, true);
-            ShowButton(this.m_PauseButton, false);
+            Utility.showHide(playButton.gameObject, true);
+            Utility.showHide(pauseButton.gameObject, false);
         }
     }
 
@@ -97,14 +91,6 @@ public class VideoController : MonoBehaviour
             else
                 videoPlayer.GetTargetAudioSource(trackNumber).UnPause();
         }
-    }
-
-    private void ShowButton(Button button, bool enable)
-    {
-
-        button.gameObject.SetActive(enable);
-        button.enabled = enable;
-        button.GetComponent<Image>().enabled = enable;
     }
 
     private void LogClipInfo()
@@ -153,8 +139,7 @@ public class VideoController : MonoBehaviour
     void HandleLoopPointReached(VideoPlayer video)
     {
         Debug.Log("Loop Point Reached: " + video.clip.name);
-
-        ShowButton(this.m_PlayButton, true);
+        Utility.showHide(playButton.gameObject, true);
     }
 
     #endregion //DELEGATES

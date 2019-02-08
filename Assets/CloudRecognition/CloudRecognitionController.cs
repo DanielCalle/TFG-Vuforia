@@ -78,52 +78,43 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Canvas leftPanel = instance.transform.Find("Canvas/LeftPanel").GetComponent<Canvas>();
         Canvas rightPanel = instance.transform.Find("Canvas/RightPanel").GetComponent<Canvas>();
 
-        showHide(leftPanel.gameObject, false);
-        showHide(rightPanel.gameObject, false);
+        Utility.showHide(leftPanel.gameObject, false);
+        Utility.showHide(rightPanel.gameObject, false);
 
         Button leftArrow = instance.transform.Find("Canvas/LeftArrowButton").GetComponent<Button>();
         Button rightArrow = instance.transform.Find("Canvas/RightArrowButton").GetComponent<Button>();
 
         leftArrow.onClick.AddListener(() =>
         {
-            showHide(leftPanel.gameObject);
+            Utility.showHide(leftPanel.gameObject);
         });
         rightArrow.onClick.AddListener(() =>
         {
-            showHide(rightPanel.gameObject);
+            Utility.showHide(rightPanel.gameObject);
         });
 
         TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
-        showHide(title.gameObject, false);
+        Utility.showHide(title.gameObject, false);
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
-        showHide(description.gameObject, false);
+        Utility.showHide(description.gameObject, false);
 
         TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
-        showHide(punctuation.gameObject, false);
-    }
-
-    private void showHide(GameObject gameObject)
-    {
-        this.showHide(gameObject, !gameObject.activeSelf);
-    }
-
-    private void showHide(GameObject gameObject, bool active) {
-        gameObject.SetActive(active);
+        Utility.showHide(punctuation.gameObject, false);
     }
 
     private void fillData(JSONObject json)
     {
         TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
-        showHide(title.gameObject, true);
+        Utility.showHide(title.gameObject, true);
         title.text = json.GetField("name").str;
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
-        showHide(description.gameObject, true);
+        Utility.showHide(description.gameObject, true);
         description.text = "Sinopsis: " + json.GetField("description").str;
 
         TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
-        showHide(punctuation.gameObject, true);
+        Utility.showHide(punctuation.gameObject, true);
 
         float valoration = json.GetField("valoration").n;
         punctuation.text = valoration + "/10";

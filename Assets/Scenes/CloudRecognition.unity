@@ -1278,8 +1278,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ead04c77e2cd3c48b14395bfa302b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayButton: {fileID: 665582258}
-  m_PauseButton: {fileID: 1376587819}
 --- !u!1 &1131375837
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,7 +1716,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -25.4, y: -25.6}
+  m_AnchoredPosition: {x: -32.5, y: -32.7}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1376587819
@@ -1964,7 +1962,7 @@ RectTransform:
   m_GameObject: {fileID: 1624034297}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 6.5, y: 5, z: 6.5}
   m_Children: []
   m_Father: {fileID: 1001881253}
   m_RootOrder: 2
