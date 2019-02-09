@@ -87,10 +87,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         leftArrow.onClick.AddListener(() =>
         {
             Utility.showHide(leftPanel.gameObject);
+            leftArrow.transform.Rotate(0, 0, 180);
         });
         rightArrow.onClick.AddListener(() =>
         {
             Utility.showHide(rightPanel.gameObject);
+            rightArrow.transform.Rotate(0, 0, 180);
         });
 
         TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
