@@ -105,6 +105,11 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void fillData(JSONObject json)
     {
+        VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
+        if (json.GetField("trailer").type != JSONObject.Type.NULL) {
+            videoPlayer.url = json.GetField("trailer").str;
+        }
+
         TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
         Utility.showHide(title.gameObject, true);
         title.text = json.GetField("name").str;
