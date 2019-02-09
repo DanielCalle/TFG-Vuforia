@@ -168,6 +168,10 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         comunication("share", this.id);
     }
+    public void youtubeClick()
+    {
+        comunication("youtube", this.id);
+    }
     private void comunication(String method, String _id)
     {
         using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -178,4 +182,5 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
+    
 }
