@@ -13,7 +13,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     // Last id for the image recognized
-    private String id = "";
+    //private String id = "";
+    private JSONObject jsonDetectedObject;
     // Original copy
     public ImageTargetBehaviour imageTargetTemplate;
     // Instances for th original
@@ -67,9 +68,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
 
             setControllers();
-
-            this.id = targetSearchResult.UniqueTargetId;
-            StartCoroutine(GetFilmData(this.id));
+            
+            StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
         }
     }
 
@@ -155,7 +155,9 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             else
             {
                 Debug.Log("Received: " + www.downloadHandler.text);
-                fillData(new JSONObject(www.downloadHandler.text));
+                this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
+                Debug.Log(jsonDetectedObject.ToString());
+                fillData(jsonDetectedObject);
             }
         }
     }
@@ -165,19 +167,19 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void planClick()
     {
-        comunication("plan", this.id);
+        comunication("plan", this.jsonDetectedObject.GetField("uuid").str);
     }
     public void likeClick()
     {
-        comunication("like", this.id);
+        comunication("like", this.jsonDetectedObject.GetField("uuid").str);
     }
     public void shareClick()
     {
-        comunication("share", this.id);
+        comunication("share", this.jsonDetectedObject.GetField("uuid").str);
     }
     public void youtubeClick()
     {
-        comunication("youtube", this.id);
+        comunication("youtube", this.jsonDetectedObject.GetField("trailer").str);
     }
     private void comunication(String method, String _id)
     {
