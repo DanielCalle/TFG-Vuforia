@@ -193,10 +193,22 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void exitARClick()
     {
+        changeActivity("exitAR");
+    }
+    public void goPlans()
+    {
+        changeActivity("goPlans");
+    }
+    public void goSaves()
+    {
+        changeActivity("goSaves");
+    }
+    private void changeActivity(string method)
+    {
         AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
-        jo.Call("exitAR");
+        jo.Call(method);
     }
 
 }
