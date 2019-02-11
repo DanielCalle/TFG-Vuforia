@@ -75,13 +75,14 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void setControllers()
     {
-        Canvas leftPanel = instance.transform.Find("Canvas/LeftPanel").GetComponent<Canvas>();
+        /*Canvas leftPanel = instance.transform.Find("Canvas/LeftPanel").GetComponent<Canvas>();
+        
         Canvas rightPanel = instance.transform.Find("Canvas/RightPanel").GetComponent<Canvas>();
 
         Utility.showHide(leftPanel.gameObject, false);
         Utility.showHide(rightPanel.gameObject, false);
-
-        Button leftArrow = instance.transform.Find("Canvas/LeftArrowButton").GetComponent<Button>();
+        */
+        /*Button leftArrow = instance.transform.Find("Canvas/LeftArrowButton").GetComponent<Button>();
         Button rightArrow = instance.transform.Find("Canvas/RightArrowButton").GetComponent<Button>();
 
         leftArrow.onClick.AddListener(() =>
@@ -93,21 +94,21 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             Utility.showHide(rightPanel.gameObject);
             rightArrow.transform.Rotate(0, 0, 180);
-        });
+        });*/
 
-        TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
+        /*TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
         Utility.showHide(title.gameObject, false);
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
-        Utility.showHide(description.gameObject, false);
+        Utility.showHide(description.gameObject, false);*/
 
-        TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
+        TextMeshPro punctuation = instance.transform.Find("Canvas/Panel/Image/Punctuation").GetComponent<TextMeshPro>();
         Utility.showHide(punctuation.gameObject, false);
     }
 
     private void fillData(JSONObject json)
     {
-        VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
+      /*VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
         if (json.GetField("trailer").type != JSONObject.Type.NULL) {
             videoPlayer.url = json.GetField("trailer").str;
         }
@@ -118,9 +119,9 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
         Utility.showHide(description.gameObject, true);
-        description.text = "Sinopsis: " + json.GetField("description").str;
+        description.text = "Sinopsis: " + json.GetField("description").str;*/
 
-        TextMeshPro punctuation = instance.transform.Find("Canvas/Punctuation").GetComponent<TextMeshPro>();
+        TextMeshPro punctuation = instance.transform.Find("Canvas/Panel/Image/Punctuation").GetComponent<TextMeshPro>();
         Utility.showHide(punctuation.gameObject, true);
 
         float valoration = json.GetField("valoration").n;
