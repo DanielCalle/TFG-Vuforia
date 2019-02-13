@@ -188,7 +188,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                jo.Call(method, _id);
+                jo.Call(method,this.jsonDetectedObject.ToString());
+
             }
         }
     }
