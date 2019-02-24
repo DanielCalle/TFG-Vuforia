@@ -101,9 +101,11 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
         TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
         Utility.showHide(description.gameObject, false);*/
-
-        TextMeshPro punctuation = instance.transform.Find("Canvas/Panel/Image/Punctuation").GetComponent<TextMeshPro>();
-        Utility.showHide(punctuation.gameObject, false);
+        RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
+        //TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Image/Punctuation").GetComponent<TextMeshPro>();
+        Utility.showHide(filmPanel.gameObject, false);
+        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, false);
     }
 
     private void fillData(JSONObject json)
@@ -121,25 +123,42 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Utility.showHide(description.gameObject, true);
         description.text = "Sinopsis: " + json.GetField("description").str;*/
 
-        TextMeshPro punctuation = instance.transform.Find("Canvas/Panel/Image/Punctuation").GetComponent<TextMeshPro>();
-        Utility.showHide(punctuation.gameObject, true);
+        if (json["email"] != null)
+        {
+            RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+            Utility.showHide(userPanel.gameObject, true);
 
-        float valoration = json.GetField("valoration").n;
-        punctuation.text = valoration + "/10";
+            TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
+            userName.text = json.GetField("name").str;
+        } else
+        {
+            RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
+            Utility.showHide(filmPanel.gameObject, true);
 
-        punctuation.color = Color.red;
-        if (valoration >= 5)
-        {
-            punctuation.color = Color.yellow;
+            //Canvas userCanvas = instance.transform.Find("UserCanvas").GetComponent<Canvas>();
+            //Utility.showHide(userCanvas.gameObject.gameObject, true);
+
+            TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Image/Punctuation").GetComponent<TextMeshPro>();
+
+            float valoration = json.GetField("valoration").n;
+            punctuation.text = valoration + "/10";
+
+            punctuation.color = Color.red;
+            if (valoration >= 5)
+            {
+                punctuation.color = Color.yellow;
+            }
+            if (valoration >= 8)
+            {
+                punctuation.color = Color.green;
+            }
+            if (valoration >= 10)
+            {
+                punctuation.color = Color.white;
+            }
         }
-        if (valoration >= 8)
-        {
-            punctuation.color = Color.green;
-        }
-        if (valoration >= 10)
-        {
-            punctuation.color = Color.white;
-        }
+        
+        
 
     }
 
