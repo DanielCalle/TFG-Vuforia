@@ -131,7 +131,11 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
             userName.text = json.GetField("name").str;
 
-            //Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
+            if (friends())
+            {
+                Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
+                Utility.showHide(addFriend.gameObject, false);
+            }
         } else
         {
             RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
