@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657856, g: 0.49641234, b: 0.57481724, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 207193221}
   - component: {fileID: 207193220}
   m_Layer: 5
-  m_Name: SaveButton
+  m_Name: ExpandButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -416,15 +416,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207193218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10.9000025}
-  m_LocalScale: {x: 0.4200357, y: 0.47760063, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10.9}
+  m_LocalScale: {x: 0.5243405, y: 0.5243405, z: 0.5243405}
   m_Children: []
   m_Father: {fileID: 812768200}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 24, y: -34}
+  m_AnchoredPosition: {x: 36.9, y: -31.4}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &207193220
@@ -468,7 +468,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1820661135}
-        m_MethodName: likeClick
+        m_MethodName: expandClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -500,7 +500,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 2d97955760b37914cbba43356ebf4631, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 73fb9219465c44f2f943360b26d6050b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1213,7 +1213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000030994}
+  m_AnchoredPosition: {x: 0, y: -0.000002861023}
   m_SizeDelta: {x: 80, y: 19.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &727185413
@@ -1249,7 +1249,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Agreagar amigo
+  m_Text: Add friend
 --- !u!222 &727185414
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1934,7 +1934,7 @@ GameObject:
   - component: {fileID: 1370248317}
   - component: {fileID: 1370248316}
   m_Layer: 5
-  m_Name: PlanButton
+  m_Name: SaveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1949,14 +1949,14 @@ RectTransform:
   m_GameObject: {fileID: 1370248314}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4200357, y: 0.47760063, z: 1}
+  m_LocalScale: {x: 0.5243405, y: 0.5243405, z: 0.5243405}
   m_Children: []
   m_Father: {fileID: 812768200}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36.1, y: 6.9}
+  m_AnchoredPosition: {x: 37.7, y: 1.1}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1370248316
@@ -2000,7 +2000,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1820661135}
-        m_MethodName: planClick
+        m_MethodName: saveClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2032,7 +2032,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 68a05b6362dcea94da32e60b544ad9fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 04c85f0d365024a55a338468603b4480, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2153,7 +2153,7 @@ RectTransform:
   m_GameObject: {fileID: 1420162831}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -42.150013}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children:
   - {fileID: 790605783}
   - {fileID: 168555108}
@@ -2924,7 +2924,7 @@ GameObject:
   - component: {fileID: 2002603598}
   - component: {fileID: 2002603597}
   m_Layer: 5
-  m_Name: ShareButton
+  m_Name: InfoButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2939,14 +2939,14 @@ RectTransform:
   m_GameObject: {fileID: 2002603595}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4200357, y: 0.47760063, z: 1}
+  m_LocalScale: {x: 0.5243405, y: 0.5243405, z: 0.5243405}
   m_Children: []
   m_Father: {fileID: 812768200}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36.1, y: -10}
+  m_AnchoredPosition: {x: 37.2, y: -15.1}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2002603597
@@ -2990,7 +2990,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1820661135}
-        m_MethodName: shareClick
+        m_MethodName: infoClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3022,7 +3022,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: e168a816cdb6877499fe8f34b1086683, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd45811fcdcd54085b13188e2cc2077b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

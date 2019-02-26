@@ -19,6 +19,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     public ImageTargetBehaviour imageTargetTemplate;
     // Instances for th original
     private ImageTargetBehaviour instance;
+    private Boolean expand_clicked = false;
     void Start()
     {
         // register this event handler at the cloud reco behaviour
@@ -146,6 +147,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
             TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Image/Punctuation").GetComponent<TextMeshPro>();
 
+            //hide button that will be shown when clicking on expand button (+)
+            Button infoButton = instance.transform.Find("Canvas/FilmPanel/Image/InfoButton").GetComponent<Button>();
+            Utility.showHide(infoButton.gameObject, false);
+
+            Button saveButton = instance.transform.Find("Canvas/FilmPanel/Image/SaveButton").GetComponent<Button>();
+            Utility.showHide(saveButton.gameObject, false);
+
+            Button expandButton = instance.transform.Find("Canvas/FilmPanel/Image/ExpandButton").GetComponent<Button>();
+            Utility.showHide(expandButton.gameObject, true);
+
             float valoration = json.GetField("valoration").n;
             punctuation.text = valoration + "/10";
 
@@ -191,21 +202,35 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
 
     }
-    public void planClick()
+    public void saveClick()
     {
-        comunication("plan", this.jsonDetectedObject.GetField("uuid").str);
+        comunication("save", this.jsonDetectedObject.str);
     }
-    public void likeClick()
+    public void expandClick()
     {
-        comunication("like", this.jsonDetectedObject.GetField("uuid").str);
+
+        Button infoButton = instance.transform.Find("Canvas/FilmPanel/Image/InfoButton").GetComponent<Button>();
+        Button saveButton = instance.transform.Find("Canvas/FilmPanel/Image/SaveButton").GetComponent<Button>();
+        if (!this.expand_clicked)
+        {
+            //show buttons when clicking first time on expand button (+)
+            Utility.showHide(infoButton.gameObject, true);
+            Utility.showHide(saveButton.gameObject, true);
+            this.expand_clicked = true;
+        } else {
+            //hide buttons when clicking second time on expand button (+)
+            Utility.showHide(infoButton.gameObject, false);
+            Utility.showHide(saveButton.gameObject, false);
+            this.expand_clicked = false;
+        }
     }
-    public void shareClick()
+    public void infoClick()
     {
-        comunication("share", this.jsonDetectedObject.GetField("uuid").str);
+        comunication("info", this.jsonDetectedObject.str);
     }
     public void youtubeClick()
     {
-        comunication("youtube", this.jsonDetectedObject.GetField("trailer").str);
+        comunication("youtube", this.jsonDetectedObject.str);
     }
     public void addFriendClick()
     {
