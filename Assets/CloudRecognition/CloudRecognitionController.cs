@@ -145,16 +145,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             //Canvas userCanvas = instance.transform.Find("UserCanvas").GetComponent<Canvas>();
             //Utility.showHide(userCanvas.gameObject.gameObject, true);
 
-            TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Image/Punctuation").GetComponent<TextMeshPro>();
+            TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Punctuation").GetComponent<TextMeshPro>();
 
             //hide button that will be shown when clicking on expand button (+)
-            Button infoButton = instance.transform.Find("Canvas/FilmPanel/Image/InfoButton").GetComponent<Button>();
+            Button infoButton = instance.transform.Find("Canvas/FilmPanel/InfoButton").GetComponent<Button>();
             Utility.showHide(infoButton.gameObject, false);
 
-            Button saveButton = instance.transform.Find("Canvas/FilmPanel/Image/SaveButton").GetComponent<Button>();
+            Button saveButton = instance.transform.Find("Canvas/FilmPanel/SaveButton").GetComponent<Button>();
             Utility.showHide(saveButton.gameObject, false);
 
-            Button expandButton = instance.transform.Find("Canvas/FilmPanel/Image/ExpandButton").GetComponent<Button>();
+            Button expandButton = instance.transform.Find("Canvas/FilmPanel/ExpandButton").GetComponent<Button>();
             Utility.showHide(expandButton.gameObject, true);
 
             float valoration = json.GetField("valoration").n;
@@ -209,8 +209,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     public void expandClick()
     {
 
-        Button infoButton = instance.transform.Find("Canvas/FilmPanel/Image/InfoButton").GetComponent<Button>();
-        Button saveButton = instance.transform.Find("Canvas/FilmPanel/Image/SaveButton").GetComponent<Button>();
+        Button infoButton = instance.transform.Find("Canvas/FilmPanel/InfoButton").GetComponent<Button>();
+        Button saveButton = instance.transform.Find("Canvas/FilmPanel/SaveButton").GetComponent<Button>();
         if (!this.expand_clicked)
         {
             //show buttons when clicking first time on expand button (+)
