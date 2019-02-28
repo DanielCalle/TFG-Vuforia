@@ -109,7 +109,22 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Utility.showHide(userPanel.gameObject, false);
     }
 
-    private void fillData(JSONObject json)
+    private void fillUserData(JSONObject json) {
+        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, true);
+
+        TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
+        String name = json.GetField("name").str;
+        userName.text = name;
+
+        if (friends())
+        {
+            Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
+            Utility.showHide(addFriend.gameObject, false);
+        }
+    }
+
+    private void fillFilmData(JSONObject json)
     {
       /*VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
         if (json.GetField("trailer").type != JSONObject.Type.NULL) {
@@ -124,55 +139,39 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Utility.showHide(description.gameObject, true);
         description.text = "Sinopsis: " + json.GetField("description").str;*/
 
-        if (json["email"] != null)
+        RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
+        Utility.showHide(filmPanel.gameObject, true);
+
+        //Canvas userCanvas = instance.transform.Find("UserCanvas").GetComponent<Canvas>();
+        //Utility.showHide(userCanvas.gameObject.gameObject, true);
+
+        TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Punctuation").GetComponent<TextMeshPro>();
+
+        //hide button that will be shown when clicking on expand button (+)
+        Button infoButton = instance.transform.Find("Canvas/FilmPanel/InfoButton").GetComponent<Button>();
+        Utility.showHide(infoButton.gameObject, false);
+
+        Button saveButton = instance.transform.Find("Canvas/FilmPanel/SaveButton").GetComponent<Button>();
+        Utility.showHide(saveButton.gameObject, false);
+
+        Button expandButton = instance.transform.Find("Canvas/FilmPanel/ExpandButton").GetComponent<Button>();
+        Utility.showHide(expandButton.gameObject, true);
+
+        float valoration = json.GetField("valoration").n;
+        punctuation.text = valoration + "/10";
+
+        punctuation.color = Color.red;
+        if (valoration >= 5)
         {
-            RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
-            Utility.showHide(userPanel.gameObject, true);
-
-            TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
-            userName.text = json.GetField("name").str;
-
-            if (friends())
-            {
-                Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
-                Utility.showHide(addFriend.gameObject, false);
-            }
-        } else
+            punctuation.color = Color.yellow;
+        }
+        if (valoration >= 8)
         {
-            RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
-            Utility.showHide(filmPanel.gameObject, true);
-
-            //Canvas userCanvas = instance.transform.Find("UserCanvas").GetComponent<Canvas>();
-            //Utility.showHide(userCanvas.gameObject.gameObject, true);
-
-            TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Punctuation").GetComponent<TextMeshPro>();
-
-            //hide button that will be shown when clicking on expand button (+)
-            Button infoButton = instance.transform.Find("Canvas/FilmPanel/InfoButton").GetComponent<Button>();
-            Utility.showHide(infoButton.gameObject, false);
-
-            Button saveButton = instance.transform.Find("Canvas/FilmPanel/SaveButton").GetComponent<Button>();
-            Utility.showHide(saveButton.gameObject, false);
-
-            Button expandButton = instance.transform.Find("Canvas/FilmPanel/ExpandButton").GetComponent<Button>();
-            Utility.showHide(expandButton.gameObject, true);
-
-            float valoration = json.GetField("valoration").n;
-            punctuation.text = valoration + "/10";
-
-            punctuation.color = Color.red;
-            if (valoration >= 5)
-            {
-                punctuation.color = Color.yellow;
-            }
-            if (valoration >= 8)
-            {
-                punctuation.color = Color.green;
-            }
-            if (valoration >= 10)
-            {
-                punctuation.color = Color.white;
-            }
+            punctuation.color = Color.green;
+        }
+        if (valoration >= 10)
+        {
+            punctuation.color = Color.white;
         }
         
         
@@ -182,6 +181,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private IEnumerator GetFilmData(String id)
     {
         // Rest GET to get data about the film
+        
         using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
         {
             yield return www.SendWebRequest();
@@ -194,7 +194,25 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
                 Debug.Log("Received: " + www.downloadHandler.text);
                 this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
                 Debug.Log(jsonDetectedObject.ToString());
-                fillData(jsonDetectedObject);
+                if (jsonDetectedObject.ToString() != "null")
+                    fillFilmData(jsonDetectedObject);
+            }
+        }
+        
+        using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/user/" + id))
+        {
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Received: " + www.downloadHandler.text);
+                this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
+                Debug.Log(jsonDetectedObject.ToString());
+                if (jsonDetectedObject.ToString() != "null")
+                    fillUserData(jsonDetectedObject);
             }
         }
     }
