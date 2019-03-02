@@ -198,8 +198,9 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
                     fillFilmData(jsonDetectedObject);
             }
         }
-        if (this.jsonDetectedObject == null)
+        if (this.jsonDetectedObject.ToString() == "null")
         {
+            Debug.Log("DETECTED USER!!!");
             using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/user/" + id))
             {
                 yield return www.SendWebRequest();
