@@ -198,23 +198,26 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
                     fillFilmData(jsonDetectedObject);
             }
         }
-        
-        using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/user/" + id))
+        if (this.jsonDetectedObject == null)
         {
-            yield return www.SendWebRequest();
-            if (www.isNetworkError || www.isHttpError)
+            using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/user/" + id))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Received: " + www.downloadHandler.text);
-                this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
-                Debug.Log(jsonDetectedObject.ToString());
-                if (jsonDetectedObject.ToString() != "null")
-                    fillUserData(jsonDetectedObject);
+                yield return www.SendWebRequest();
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Received: " + www.downloadHandler.text);
+                    this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
+                    Debug.Log(jsonDetectedObject.ToString());
+                    if (jsonDetectedObject.ToString() != "null")
+                        fillUserData(jsonDetectedObject);
+                }
             }
         }
+        
     }
     void OnGUI()
     {
@@ -248,6 +251,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void youtubeClick()
     {
+        Debug.Log(this.jsonDetectedObject.GetField("trailer").str.ToString());
         comunication("youtube", this.jsonDetectedObject.str);
     }
     public void addFriendClick()
