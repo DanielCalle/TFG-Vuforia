@@ -252,7 +252,6 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void youtubeClick()
     {
-        Debug.Log(this.jsonDetectedObject.GetField("trailer").str.ToString());
         comunication("youtube", this.jsonDetectedObject.str);
     }
     public void addFriendClick()
