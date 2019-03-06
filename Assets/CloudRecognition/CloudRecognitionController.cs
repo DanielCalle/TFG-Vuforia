@@ -226,7 +226,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void saveClick()
     {
-        comunication("save", this.jsonDetectedObject.GetField("uuid").ToString());
+        comunication("save", this.jsonDetectedObject.GetField("uuid").str);
     }
     public void expandClick()
     {
