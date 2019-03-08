@@ -20,6 +20,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     // Instances for th original
     private ImageTargetBehaviour instance;
     private Boolean expand_clicked = false;
+    private String idDetected;
+
     void Start()
     {
         // register this event handler at the cloud reco behaviour
@@ -69,8 +71,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             instance = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(targetSearchResult, cloneImageTargetBehaviour.gameObject);
 
             setControllers();
-            
-            StartCoroutine(GetFilmData(targetSearchResult.UniqueTargetId));
+
+            this.idDetected = targetSearchResult.UniqueTargetId;
+
+
+            GetFilmData(this.idDetected);
+
         }
     }
 
@@ -178,10 +184,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     }
 
-    private IEnumerator GetFilmData(String id)
+    private void GetFilmData(String id)
     {
         // Rest GET to get data about the film
-        
+        using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                jo.Call("DAOFilmsController", "getFilmById", this.idDetected);
+
+            }
+        }
+        /*comunication("info", this.jsonDetectedObject.str);
         using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
         {
             yield return www.SendWebRequest();
@@ -217,7 +231,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
                         fillUserData(jsonDetectedObject);
                 }
             }
-        }
+        }*/
         
     }
     void OnGUI()
@@ -246,9 +260,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             this.expand_clicked = false;
         }
     }
+   
     public void infoClick()
     {
         comunication("info", this.jsonDetectedObject.str);
+    }
+    public void recibeInfoFilm(String info)
+    {
+        Debug.Log("Estoy en unity y he recibido " + info);
+        this.jsonDetectedObject = new JSONObject(info);
+        fillFilmData(this.jsonDetectedObject);
     }
     public void youtubeClick()
     {
