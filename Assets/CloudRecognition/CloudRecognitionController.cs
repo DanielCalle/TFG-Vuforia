@@ -75,7 +75,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             this.idDetected = targetSearchResult.UniqueTargetId;
 
 
-            GetFilmData(this.idDetected);
+            GetData(this.idDetected);
 
         }
     }
@@ -184,14 +184,15 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     }
 
-    private void GetFilmData(String id)
+    private void GetData(String id)
     {
         // Rest GET to get data about the film
         using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                jo.Call("DAOFilmsController", "getFilmById", this.idDetected);
+                jo.Call("DAOController", "getFilmById", this.idDetected);
+                jo.Call("DAOController", "getUserById", this.idDetected);
 
             }
         }
@@ -267,9 +268,15 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void recibeInfoFilm(String info)
     {
-        Debug.Log("Estoy en unity y he recibido " + info);
+        Debug.Log("Estoy en unity (film) y he recibido " + info);
         this.jsonDetectedObject = new JSONObject(info);
         fillFilmData(this.jsonDetectedObject);
+    }
+    public void recibeInfoUser(String info)
+    {
+        Debug.Log("Estoy en unity (user) y he recibido " + info);
+        this.jsonDetectedObject = new JSONObject(info);
+        fillUserData(this.jsonDetectedObject);
     }
     public void youtubeClick()
     {
