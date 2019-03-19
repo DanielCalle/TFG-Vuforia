@@ -122,12 +122,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
         String name = json.GetField("name").str;
         userName.text = name;
+        friends();
 
-        if (friends())
+        /*if (friends())
         {
             Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
             Utility.showHide(addFriend.gameObject, false);
-        }
+        }*/
+    }
+    private void fillNoFriends()
+    {
+        Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
+        Utility.showHide(addFriend.gameObject, false);
     }
 
     private void fillFilmData(JSONObject json)
@@ -163,7 +169,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Button expandButton = instance.transform.Find("Canvas/FilmPanel/ExpandButton").GetComponent<Button>();
         Utility.showHide(expandButton.gameObject, true);
 
-        float valoration = json.GetField("valoration").n;
+        float valoration = json.GetField("rating").n;
         punctuation.text = valoration + "/10";
 
         punctuation.color = Color.red;
@@ -317,10 +323,29 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         jo.Call(method);
     }
 
-    private Boolean friends()
+    private void friends()
     {
-        //Método que se comunica con el server y comprobará si ya son amigos
-        return false;
+        using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                jo.Call("areFriends", this.jsonDetectedObject.str);
+
+            }
+        }
+    }
+    public void recibeInfoFriends(String info)
+    {
+        if (string.Equals(info, "true"))
+        {
+            //Son amigos
+            Debug.Log("Son amigos");
+        }
+        else
+        {
+            fillNoFriends();
+            Debug.Log("No son amigos");
+        }
     }
 
 }
