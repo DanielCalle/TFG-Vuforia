@@ -130,7 +130,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             Utility.showHide(addFriend.gameObject, false);
         }*/
     }
-    private void fillNoFriends()
+    private void fillFriends()
     {
         Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
         Utility.showHide(addFriend.gameObject, false);
@@ -329,7 +329,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                jo.Call("areFriends", this.jsonDetectedObject.str);
+                jo.Call("DAOController", "areFriends", this.idDetected);
 
             }
         }
@@ -339,11 +339,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         if (string.Equals(info, "true"))
         {
             //Son amigos
+            fillFriends();
             Debug.Log("Son amigos");
         }
         else
         {
-            fillNoFriends();
+            //fillNoFriends(); Crear este metodo cuando hagamos la vista de amigos
             Debug.Log("No son amigos");
         }
     }
