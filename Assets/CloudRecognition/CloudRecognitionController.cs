@@ -1,12 +1,7 @@
 ﻿using Vuforia;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Video;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
-using System.Text;
 using System;
 public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 {
@@ -82,66 +77,23 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void setControllers()
     {
-        /*Canvas leftPanel = instance.transform.Find("Canvas/LeftPanel").GetComponent<Canvas>();
-        
-        Canvas rightPanel = instance.transform.Find("Canvas/RightPanel").GetComponent<Canvas>();
-
-        Utility.showHide(leftPanel.gameObject, false);
-        Utility.showHide(rightPanel.gameObject, false);
-        */
-        /*Button leftArrow = instance.transform.Find("Canvas/LeftArrowButton").GetComponent<Button>();
-        Button rightArrow = instance.transform.Find("Canvas/RightArrowButton").GetComponent<Button>();
-
-        leftArrow.onClick.AddListener(() =>
-        {
-            Utility.showHide(leftPanel.gameObject);
-            leftArrow.transform.Rotate(0, 0, 180);
-        });
-        rightArrow.onClick.AddListener(() =>
-        {
-            Utility.showHide(rightPanel.gameObject);
-            rightArrow.transform.Rotate(0, 0, 180);
-        });*/
-
-        /*TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
-        Utility.showHide(title.gameObject, false);
-
-        TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
-        Utility.showHide(description.gameObject, false);*/
+        //We hide all the canvas at the begin waiting for know what kind of information we have received from the camera
         RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
-        //TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Image/Punctuation").GetComponent<TextMeshPro>();
         Utility.showHide(filmPanel.gameObject, false);
         RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
         Utility.showHide(userPanel.gameObject, false);
         RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
         Utility.showHide(friendPanel.gameObject, false);
-        /*Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
-        Utility.showHide(addFriend.gameObject, false);
-        TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
-        Utility.showHide(userName.gameObject, false);
-        TextMeshPro userName2 = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
-        Utility.showHide(userName.gameObject, false);*/
     }
 
     private void fillUserData() {
-        
+        //In this moment we know that is an user but we need to know if is a friend or not
         friends();
-
-        /*if (friends())
-        {
-            Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
-            Utility.showHide(addFriend.gameObject, false);
-        }*/
         
     }
     private void fillFriends()
     {
-        /*UnityEngine.UI.Image imagen1 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen1.gameObject, true);
-        UnityEngine.UI.Image imagen2 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen2.gameObject, true);
-        UnityEngine.UI.Image imagen3 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen3.gameObject, true);*/
+        //If is a friend we show all the components of the friends canvas
         RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
         Utility.showHide(friendPanel.gameObject, true);
         TextMeshPro userName = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
@@ -150,7 +102,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     
     private void fillNoFriends()
     {
-
+        //If is not a friend we show all the components of the no-friends canvas (user)
         RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
         Utility.showHide(userPanel.gameObject, true);
 
@@ -164,24 +116,9 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void fillFilmData()
     {
-      /*VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
-        if (json.GetField("trailer").type != JSONObject.Type.NULL) {
-            videoPlayer.url = json.GetField("trailer").str;
-        }
-
-        TextMeshPro title = instance.transform.Find("Canvas/RightPanel/Title").GetComponent<TextMeshPro>();
-        Utility.showHide(title.gameObject, true);
-        title.text = json.GetField("name").str;
-
-        TextMeshPro description = instance.transform.Find("Canvas/RightPanel/Description").GetComponent<TextMeshPro>();
-        Utility.showHide(description.gameObject, true);
-        description.text = "Sinopsis: " + json.GetField("description").str;*/
-
+        //If is a film we show all the components of the film canvas
         RectTransform filmPanel = instance.transform.Find("Canvas/FilmPanel").GetComponent<RectTransform>();
         Utility.showHide(filmPanel.gameObject, true);
-
-        //Canvas userCanvas = instance.transform.Find("UserCanvas").GetComponent<Canvas>();
-        //Utility.showHide(userCanvas.gameObject.gameObject, true);
 
         TextMeshPro punctuation = instance.transform.Find("Canvas/FilmPanel/Punctuation").GetComponent<TextMeshPro>();
 
@@ -218,53 +155,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void GetData(String id)
     {
-        // Rest GET to get data about the film
         using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
+                //We call user and film in android for know if is a film or is an user
                 jo.Call("DAOController", "getFilmById", this.idDetected);
                 jo.Call("DAOController", "getUserById", this.idDetected);
 
             }
         }
-        /*comunication("info", this.jsonDetectedObject.str);
-        using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/film/" + id))
-        {
-            yield return www.SendWebRequest();
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Received: " + www.downloadHandler.text);
-                this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
-                Debug.Log(jsonDetectedObject.ToString());
-                if (jsonDetectedObject.ToString() != "null")
-                    fillFilmData(jsonDetectedObject);
-            }
-        }
-        if (this.jsonDetectedObject.ToString() == "null")
-        {
-            Debug.Log("DETECTED USER!!!");
-            using (UnityWebRequest www = UnityWebRequest.Get("http://tfg-spring.herokuapp.com/user/" + id))
-            {
-                yield return www.SendWebRequest();
-                if (www.isNetworkError || www.isHttpError)
-                {
-                    Debug.Log(www.error);
-                }
-                else
-                {
-                    Debug.Log("Received: " + www.downloadHandler.text);
-                    this.jsonDetectedObject = new JSONObject(www.downloadHandler.text);
-                    Debug.Log(jsonDetectedObject.ToString());
-                    if (jsonDetectedObject.ToString() != "null")
-                        fillUserData(jsonDetectedObject);
-                }
-            }
-        }*/
         
     }
     void OnGUI()
@@ -300,13 +200,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void recibeInfoFilm(String info)
     {
-        Debug.Log("Estoy en unity (film) y he recibido " + info);
+        //This method receive the information from android in case that the object is a film
         this.jsonDetectedObject = new JSONObject(info);
         fillFilmData();
     }
     public void recibeInfoUser(String info)
     {
-        Debug.Log("Estoy en unity (user) y he recibido " + info);
+        //This method receive the information from android in case that the object is a user
         this.jsonDetectedObject = new JSONObject(info);
         fillUserData();
     }
@@ -329,18 +229,6 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
-    public void exitARClick()
-    {
-        changeActivity("exitAR");
-    }
-    public void goPlans()
-    {
-        changeActivity("goPlans");
-    }
-    public void goSaves()
-    {
-        changeActivity("goSaves");
-    }
     private void changeActivity(string method)
     {
         AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -351,6 +239,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void friends()
     {
+        //We use this method when we know that the object is an user and we want to know if is a friend
         using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
@@ -362,6 +251,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void recibeInfoFriends(String info)
     {
+        //This method receive the information from android and says if is a friend or not
         if (string.Equals(info, "true"))
         {
             //Son amigos
