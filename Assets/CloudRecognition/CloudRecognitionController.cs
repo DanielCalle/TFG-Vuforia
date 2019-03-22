@@ -113,28 +113,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Utility.showHide(filmPanel.gameObject, false);
         RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
         Utility.showHide(userPanel.gameObject, false);
-        Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
+        RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
+        Utility.showHide(friendPanel.gameObject, false);
+        /*Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
         Utility.showHide(addFriend.gameObject, false);
-        UnityEngine.UI.Image imagen1 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen1.gameObject, false);
-        UnityEngine.UI.Image imagen2 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen2.gameObject, false);
-        UnityEngine.UI.Image imagen3 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen3.gameObject, false);
         TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
         Utility.showHide(userName.gameObject, false);
         TextMeshPro userName2 = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
-        Utility.showHide(userName.gameObject, false);
+        Utility.showHide(userName.gameObject, false);*/
     }
 
-    private void fillUserData(JSONObject json) {
-        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
-        Utility.showHide(userPanel.gameObject, true);
-
-        TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
-        String name = json.GetField("name").str;
-        Utility.showHide(userName.gameObject, true);
-        userName.text = name;
+    private void fillUserData() {
+        
         friends();
 
         /*if (friends())
@@ -142,24 +132,37 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
             Utility.showHide(addFriend.gameObject, false);
         }*/
+        
     }
     private void fillFriends()
     {
-        UnityEngine.UI.Image imagen1 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
+        /*UnityEngine.UI.Image imagen1 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
         Utility.showHide(imagen1.gameObject, true);
         UnityEngine.UI.Image imagen2 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
         Utility.showHide(imagen2.gameObject, true);
         UnityEngine.UI.Image imagen3 = instance.transform.Find("Canvas/FriendPanel/Film1").GetComponent<UnityEngine.UI.Image>();
-        Utility.showHide(imagen3.gameObject, true);
+        Utility.showHide(imagen3.gameObject, true);*/
+        RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
+        Utility.showHide(friendPanel.gameObject, true);
+        TextMeshPro userName = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
+        String name = this.jsonDetectedObject.GetField("name").str;
     }
     
     private void fillNoFriends()
     {
+
+        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, true);
+
+        TextMeshPro userName = instance.transform.Find("Canvas/UserPanel/UserName").GetComponent<TextMeshPro>();
+        String name = this.jsonDetectedObject.GetField("name").str;
+        Utility.showHide(userName.gameObject, true);
+        userName.text = name;
         Button addFriend = instance.transform.Find("Canvas/UserPanel/ButtonAddFriend").GetComponent<Button>();
         Utility.showHide(addFriend.gameObject, true);
     }
 
-    private void fillFilmData(JSONObject json)
+    private void fillFilmData()
     {
       /*VideoPlayer videoPlayer = instance.transform.Find("Canvas/LeftPanel/TrailerUrl").GetComponent<VideoPlayer>();
         if (json.GetField("trailer").type != JSONObject.Type.NULL) {
@@ -192,7 +195,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         Button expandButton = instance.transform.Find("Canvas/FilmPanel/ExpandButton").GetComponent<Button>();
         Utility.showHide(expandButton.gameObject, true);
 
-        float valoration = json.GetField("rating").n;
+        float valoration = this.jsonDetectedObject.GetField("rating").n;
         punctuation.text = valoration + "/10";
 
         punctuation.color = Color.red;
@@ -299,13 +302,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         Debug.Log("Estoy en unity (film) y he recibido " + info);
         this.jsonDetectedObject = new JSONObject(info);
-        fillFilmData(this.jsonDetectedObject);
+        fillFilmData();
     }
     public void recibeInfoUser(String info)
     {
         Debug.Log("Estoy en unity (user) y he recibido " + info);
         this.jsonDetectedObject = new JSONObject(info);
-        fillUserData(this.jsonDetectedObject);
+        fillUserData();
     }
     public void youtubeClick()
     {
