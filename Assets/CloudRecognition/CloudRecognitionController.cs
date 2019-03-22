@@ -16,7 +16,6 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private ImageTargetBehaviour instance;
     private Boolean expand_clicked = false;
     private String idDetected;
-
     void Start()
     {
         // register this event handler at the cloud reco behaviour
