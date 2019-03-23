@@ -197,13 +197,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         comunication("info", this.jsonDetectedObject.str);
     }
-    public void recibeInfoFilm(String info)
+    public void getFilmById(String info)
     {
         //This method receive the information from android in case that the object is a film
         this.jsonDetectedObject = new JSONObject(info);
         fillFilmData();
     }
-    public void recibeInfoUser(String info)
+    public void getUserById(String info)
     {
         //This method receive the information from android in case that the object is a user
         this.jsonDetectedObject = new JSONObject(info);
@@ -248,7 +248,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
-    public void recibeInfoFriends(String info)
+    public void areFriends(String info)
     {
         //This method receive the information from android and says if is a friend or not
         if (string.Equals(info, "true"))
