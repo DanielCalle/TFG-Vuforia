@@ -215,7 +215,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void addFriendClick()
     {
-        comunication("addFriend","");
+        using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                jo.Call("DAOController", "addFriend", this.idDetected);
+            }
+        }
+        
+    }
+    public void addFriend(String info)
+    {
+
     }
     private void comunication(String method, String _id)
     {
