@@ -262,7 +262,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     public void areFriends(String info)
     {
         //This method receive the information from android and says if is a friend or not
-        if (string.Equals(info, "true"))
+        if (string.Equals(info, "true") || (!string.Equals(info, "null") && !string.Equals(info, "false")))
         {
             //Son amigos
             fillFriends();
