@@ -87,16 +87,21 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 
     private void fillUserData() {
         //In this moment we know that is an user but we need to know if is a friend or not
+        fillNoFriends();
         friends();
         
     }
     private void fillFriends()
     {
+        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, false);
         //If is a friend we show all the components of the friends canvas
         RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
         Utility.showHide(friendPanel.gameObject, true);
         TextMeshPro userName = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
         String name = this.jsonDetectedObject.GetField("name").str;
+        userName.text = name;
+
     }
     
     private void fillNoFriends()
