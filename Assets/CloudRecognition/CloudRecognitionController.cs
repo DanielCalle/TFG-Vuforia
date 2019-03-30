@@ -16,11 +16,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private ImageTargetBehaviour instance;
     private Boolean expand_clicked = false;
     private String idDetected;
+
     void Start()
     {
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
-
+        GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
+        Utility.showHide(friendsCanvas, false);
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
@@ -93,14 +95,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     private void fillFriends()
     {
-        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        /*RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
         Utility.showHide(userPanel.gameObject, false);
         //If is a friend we show all the components of the friends canvas
         RectTransform friendPanel = instance.transform.Find("Canvas/FriendPanel").GetComponent<RectTransform>();
         Utility.showHide(friendPanel.gameObject, true);
         TextMeshPro userName = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
         String name = this.jsonDetectedObject.GetField("name").str;
-        userName.text = name;
+        userName.text = name;*/
+        GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
+        Utility.showHide(friendsCanvas, true);
 
     }
     
@@ -278,6 +282,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             fillNoFriends();
             Debug.Log("No son amigos");
         }
+    }
+    public void friendsLeftArrow()
+    {
+        
+        UnityEngine.UI.Image image = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
+        Debug.Log("flecha izquierda " + image.ToString());
     }
 
 }
