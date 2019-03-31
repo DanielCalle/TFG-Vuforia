@@ -21,8 +21,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
-        GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
-        Utility.showHide(friendsCanvas, false);
+        /*GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
+        Utility.showHide(friendsCanvas, false);*/
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
@@ -285,9 +285,37 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void friendsLeftArrow()
     {
-        
-        UnityEngine.UI.Image image = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
-        Debug.Log("flecha izquierda " + image.ToString());
+        /*
+         La imagen 3 pasa a la imagen 2
+         La imagen 1 pasa a la imagen 3
+         La imagen 2 pasa a la imagen 1
+         
+         */
+        UnityEngine.UI.Image image1 = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2 = this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image3 = this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2Aux = GameObject.Instantiate(this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>());
+        image2.sprite = image1.sprite;
+        image1.sprite = image3.sprite;
+        image3.sprite = image2Aux.sprite;
+        Destroy(image2Aux);
+    }
+    public void friendsRightArrow()
+    {
+        /*
+         La imagen 2 pasa a la imagen 3
+         La imagen 3 pasa a la imagen 1
+         La imagen 1 pasa a la imagen 2
+         
+         */
+        UnityEngine.UI.Image image1 = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2 = this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image3 = this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2Aux = GameObject.Instantiate(this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>());
+        image2.sprite = image3.sprite;
+        image3.sprite = image1.sprite;
+        image1.sprite = image2Aux.sprite;
+        Destroy(image2Aux);
     }
 
 }
