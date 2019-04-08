@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
@@ -21,8 +22,10 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
-        /*GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
-        Utility.showHide(friendsCanvas, false);*/
+        GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
+        Utility.showHide(friendsCanvas, false);
+        //Eliminar despues de las pruebas
+        fillFriends();
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
@@ -105,9 +108,26 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         userName.text = name;*/
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, true);
+        string str = "{\"usersUrl\": {\"1\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"2\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"3\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"4\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"5\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"6\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\"},\"films\": {\"1\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"2\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\",\"3\":\"https://dam.ngenespanol.com/wp-content/uploads/2019/03/luna-colores-nuevo.png\"},\"usersRatings\": {\"1\":8,\"2\":7,\"3\":6,\"4\":5,\"5\":4,\"6\":3}}";
+        JSONObject json = new JSONObject(str);
+        StartCoroutine(cargaImagen(json.GetField("films").GetField("1").str, this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>()));
+        StartCoroutine(cargaImagen(json.GetField("films").GetField("2").str, this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>()));
+        StartCoroutine(cargaImagen(json.GetField("films").GetField("3").str, this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>()));
+        for (int i = 1; i <= 6; i++)
+        {
+            StartCoroutine(cargaImagen(json.GetField("usersUrl").GetField(i.ToString()).str, this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
+        }
+        Debug.Log(json.GetField("usersUrl").GetField("1"));
+        Debug.Log("carga de imagen");
 
     }
-    
+    IEnumerator cargaImagen(String url, UnityEngine.UI.Image img)
+    {
+        WWW www = new WWW(url);
+        yield return www;
+        img.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
+    }
+
     private void fillNoFriends()
     {
         //If is not a friend we show all the components of the no-friends canvas (user)
