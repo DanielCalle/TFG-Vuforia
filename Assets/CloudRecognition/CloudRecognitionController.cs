@@ -116,9 +116,9 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         for (int i = 1; i <= 6; i++)
         {
             StartCoroutine(cargaImagen(json.GetField("usersUrl").GetField(i.ToString()).str, this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
+            int puntuacion = int.Parse(json.GetField("usersRatings").GetField(i.ToString()).ToString(), System.Globalization.NumberStyles.Integer);
+            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion*10);
         }
-        Debug.Log(json.GetField("usersUrl").GetField("1"));
-        Debug.Log("carga de imagen");
 
     }
     IEnumerator cargaImagen(String url, UnityEngine.UI.Image img)
