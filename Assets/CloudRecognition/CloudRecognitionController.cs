@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
 {
     private CloudRecoBehaviour mCloudRecoBehaviour;
@@ -18,6 +20,12 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private Boolean expand_clicked = false;
     private String idDetected;
 
+    private struct plan_info
+    {
+        public ArrayList usersUrl;
+        public ArrayList notas;
+    }
+    private Dictionary<int, plan_info> top;
     void Start()
     {
         // register this event handler at the cloud reco behaviour
@@ -108,17 +116,35 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         userName.text = name;*/
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, true);
-        string str = "{\"usersUrl\": {\"1\":\"https://drive.google.com/uc?export=download&id=1u_KQSjgfq6yjEWDgVu26CD3LbOa6LF6I\",\"2\":\"https://drive.google.com/uc?export=download&id=1El8StoIH-90zQS5S3vJ-fm3O0eHXiArC\",\"3\":\"https://drive.google.com/uc?export=download&id=1e_2RqYU-8VNrsjzYTIHJSLe7q7rJzWkQ\",\"4\":\"https://drive.google.com/uc?export=download&id=1txUTitJRfHu1YPftp2db2WIFcwqBEh7n\",\"5\":\"https://drive.google.com/uc?export=download&id=1oKxiawgsZ4HVpMngdLmePqSRYllNJ1bv\",\"6\":\"https://drive.google.com/uc?export=download&id=1BKH2Msrv9LwTLaMZE-VP2FlUqeLUoMtO\"},\"films\": {\"1\":\"https://drive.google.com/uc?export=download&id=1JT9Bcl6FimSqvejD3BNvVWmbv0t8mlVE\",\"2\":\"https://drive.google.com/uc?export=download&id=1RBiLM2II3tEXs-ZsdTSWroMu-xCzrbR2\",\"3\":\"https://drive.google.com/uc?export=download&id=1WqyyVvg56pSeCyC0KAtjZLmmekZ0hyi9\"},\"usersRatings\": {\"1\":8,\"2\":7,\"3\":6,\"4\":5,\"5\":4,\"6\":3}}";
+        string str = "{\"usersUrl_Film1\": {\"1\":\"https://drive.google.com/uc?export=download&id=1u_KQSjgfq6yjEWDgVu26CD3LbOa6LF6I\",\"2\":\"https://drive.google.com/uc?export=download&id=1El8StoIH-90zQS5S3vJ-fm3O0eHXiArC\",\"3\":\"https://drive.google.com/uc?export=download&id=1e_2RqYU-8VNrsjzYTIHJSLe7q7rJzWkQ\",\"4\":\"https://drive.google.com/uc?export=download&id=1txUTitJRfHu1YPftp2db2WIFcwqBEh7n\",\"5\":\"https://drive.google.com/uc?export=download&id=1oKxiawgsZ4HVpMngdLmePqSRYllNJ1bv\",\"6\":\"https://drive.google.com/uc?export=download&id=1BKH2Msrv9LwTLaMZE-VP2FlUqeLUoMtO\"},\"usersUrl_Film2\": {\"1\":\"https://drive.google.com/uc?export=download&id=1u_KQSjgfq6yjEWDgVu26CD3LbOa6LF6I\",\"2\":\"https://drive.google.com/uc?export=download&id=1El8StoIH-90zQS5S3vJ-fm3O0eHXiArC\",\"3\":\"https://drive.google.com/uc?export=download&id=1oKxiawgsZ4HVpMngdLmePqSRYllNJ1bv\",\"4\":\"https://drive.google.com/uc?export=download&id=1txUTitJRfHu1YPftp2db2WIFcwqBEh7n\",\"5\":\"https://drive.google.com/uc?export=download&id=1e_2RqYU-8VNrsjzYTIHJSLe7q7rJzWkQ\",\"6\":\"https://drive.google.com/uc?export=download&id=1BKH2Msrv9LwTLaMZE-VP2FlUqeLUoMtO\"},\"usersUrl_Film3\": {\"1\":\"https://drive.google.com/uc?export=download&id=1u_KQSjgfq6yjEWDgVu26CD3LbOa6LF6I\",\"2\":\"https://drive.google.com/uc?export=download&id=1El8StoIH-90zQS5S3vJ-fm3O0eHXiArC\",\"3\":\"https://drive.google.com/uc?export=download&id=1e_2RqYU-8VNrsjzYTIHJSLe7q7rJzWkQ\",\"4\":\"https://drive.google.com/uc?export=download&id=1txUTitJRfHu1YPftp2db2WIFcwqBEh7n\",\"5\":\"https://drive.google.com/uc?export=download&id=1oKxiawgsZ4HVpMngdLmePqSRYllNJ1bv\",\"6\":\"https://drive.google.com/uc?export=download&id=1BKH2Msrv9LwTLaMZE-VP2FlUqeLUoMtO\"},\"films\": {\"1\":\"https://drive.google.com/uc?export=download&id=1JT9Bcl6FimSqvejD3BNvVWmbv0t8mlVE\",\"2\":\"https://drive.google.com/uc?export=download&id=1RBiLM2II3tEXs-ZsdTSWroMu-xCzrbR2\",\"3\":\"https://drive.google.com/uc?export=download&id=1WqyyVvg56pSeCyC0KAtjZLmmekZ0hyi9\"},\"usersRatings_Film1\": {\"1\":8,\"2\":7,\"3\":6,\"4\":5,\"5\":4,\"6\":3},\"usersRatings_Film2\": {\"1\":1,\"2\":1,\"3\":1,\"4\":1,\"5\":1,\"6\":1},\"usersRatings_Film3\": {\"1\":5,\"2\":5,\"3\":5,\"4\":5,\"5\":5,\"6\":5}}";
         JSONObject json = new JSONObject(str);
         StartCoroutine(cargaImagen(json.GetField("films").GetField("1").str, this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>()));
         StartCoroutine(cargaImagen(json.GetField("films").GetField("2").str, this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>()));
         StartCoroutine(cargaImagen(json.GetField("films").GetField("3").str, this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>()));
         for (int i = 1; i <= 6; i++)
         {
-            StartCoroutine(cargaImagen(json.GetField("usersUrl").GetField(i.ToString()).str, this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
-            int puntuacion = int.Parse(json.GetField("usersRatings").GetField(i.ToString()).ToString(), System.Globalization.NumberStyles.Integer);
+            StartCoroutine(cargaImagen(json.GetField("usersUrl_Film1").GetField(i.ToString()).str, this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
+            int puntuacion = int.Parse(json.GetField("usersRatings_Film1").GetField(i.ToString()).ToString(), System.Globalization.NumberStyles.Integer);
             this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion*10);
         }
+        top = new Dictionary<int, plan_info>();
+        for (int i = 0; i < 3; i++)
+        {
+            plan_info planAux = new plan_info();
+            planAux.usersUrl = new ArrayList();
+            planAux.notas = new ArrayList();
+            for(int j = 1; j <= 6; j++)
+            {
+                //Debug.Log("Aqui" + json.GetField("usersUrl_Film" + (i + 1)).GetField(j.ToString()).str);
+                planAux.usersUrl.Add(json.GetField("usersUrl_Film" + (i + 1)).GetField(j.ToString()).str);
+                planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i + 1)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
+            }
+            top.Add(i+1, planAux);
+            /*if (i == 0) top.Add(this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>(), planAux);
+            else if (i == 1) top.Add(this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>(), planAux);
+            else top.Add(this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>(), planAux);*/
+        }
+        
 
     }
     IEnumerator cargaImagen(String url, UnityEngine.UI.Image img)
@@ -311,6 +337,15 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
          La imagen 2 pasa a la imagen 1
          
          */
+        /*UnityEngine.UI.Image image1 = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2 = this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image3 = this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>();
+        UnityEngine.UI.Image image2Aux = GameObject.Instantiate(this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>());
+        image2.sprite = image1.sprite;
+        image1.sprite = image3.sprite;
+        image3.sprite = image2Aux.sprite;
+        Destroy(image2Aux);*/
+
         UnityEngine.UI.Image image1 = this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>();
         UnityEngine.UI.Image image2 = this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>();
         UnityEngine.UI.Image image3 = this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>();
@@ -319,6 +354,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         image1.sprite = image3.sprite;
         image3.sprite = image2Aux.sprite;
         Destroy(image2Aux);
+
+        for (int i = 1; i <= 6; i++)
+        {
+            StartCoroutine(cargaImagen((string)top[3].usersUrl[i-1], this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
+            int puntuacion = (int) top[3].notas[i-1];
+            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+        }
+        Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
+        newDictionary.Add(1, top[3]);
+        newDictionary.Add(2, top[1]);
+        newDictionary.Add(3, top[2]);
+        top = newDictionary;
     }
     public void friendsRightArrow()
     {
