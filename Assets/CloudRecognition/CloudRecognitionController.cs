@@ -128,21 +128,17 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion*10);
         }
         top = new Dictionary<int, plan_info>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 1; i <= 3; i++)
         {
             plan_info planAux = new plan_info();
             planAux.usersUrl = new ArrayList();
             planAux.notas = new ArrayList();
             for(int j = 1; j <= 6; j++)
             {
-                //Debug.Log("Aqui" + json.GetField("usersUrl_Film" + (i + 1)).GetField(j.ToString()).str);
-                planAux.usersUrl.Add(json.GetField("usersUrl_Film" + (i + 1)).GetField(j.ToString()).str);
-                planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i + 1)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
+                planAux.usersUrl.Add(json.GetField("usersUrl_Film" + (i)).GetField(j.ToString()).str);
+                planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
             }
-            top.Add(i+1, planAux);
-            /*if (i == 0) top.Add(this.transform.Find("Canvas/FirstPosition").GetComponent<UnityEngine.UI.Image>(), planAux);
-            else if (i == 1) top.Add(this.transform.Find("Canvas/SecondPosition").GetComponent<UnityEngine.UI.Image>(), planAux);
-            else top.Add(this.transform.Find("Canvas/ThirdPosition").GetComponent<UnityEngine.UI.Image>(), planAux);*/
+            top.Add(i, planAux);
         }
         
 
@@ -383,6 +379,18 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         image3.sprite = image1.sprite;
         image1.sprite = image2Aux.sprite;
         Destroy(image2Aux);
+
+        for (int i = 1; i <= 6; i++)
+        {
+            StartCoroutine(cargaImagen((string)top[2].usersUrl[i - 1], this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
+            int puntuacion = (int)top[2].notas[i - 1];
+            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+        }
+        Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
+        newDictionary.Add(1, top[2]);
+        newDictionary.Add(2, top[3]);
+        newDictionary.Add(3, top[1]);
+        top = newDictionary;
     }
 
 }
