@@ -19,6 +19,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private ImageTargetBehaviour instance;
     private Boolean expand_clicked = false;
     private String idDetected;
+    private String idUser = "";
 
     private struct plan_info
     {
@@ -259,6 +260,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         //This method receive the information from android in case that the object is a user
         this.jsonDetectedObject = new JSONObject(info);
+        this.idUser = jsonDetectedObject.GetField("id").str;
         fillUserData();
     }
     public void youtubeClick()
@@ -271,7 +273,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                jo.Call("DAOController", "addFriend", this.idDetected);
+                jo.Call("DAOController", "addFriend", this.idUser);
             }
         }
         
@@ -306,7 +308,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
             {
-                jo.Call("DAOController", "areFriends", this.idDetected);
+                jo.Call("DAOController", "areFriends", this.idUser);
 
             }
         }
