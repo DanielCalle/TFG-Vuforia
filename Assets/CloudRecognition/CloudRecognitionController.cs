@@ -29,6 +29,10 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private Dictionary<int, plan_info> top;
     void Start()
     {
+        /*String prueba = "{\"id\":1,\"uuid\":\"596abcff71644f4eb855a2d372941674\",\"name\":\"Zihao\",\"email\":\"zhong@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/zihao.png\"}";
+        this.jsonDetectedObject = new JSONObject(prueba);
+        this.idUser = jsonDetectedObject.GetField("id").ToString();
+        Debug.Log("el id es " + this.idUser);*/
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
@@ -57,7 +61,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         mIsScanning = scanning;
         if (scanning)
         {
-            // clear all known trackables
+            // clear all known trackablesgetUserById
             ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
             tracker.TargetFinder.ClearTrackables(false);
         }
@@ -260,7 +264,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         //This method receive the information from android in case that the object is a user
         this.jsonDetectedObject = new JSONObject(info);
-        this.idUser = jsonDetectedObject.GetField("id").str;
+        this.idUser = jsonDetectedObject.GetField("id").ToString();
         fillUserData();
     }
     public void youtubeClick()
