@@ -317,13 +317,24 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             }
         }
     }
+    private void getPlans(String info)
+    {
+        fillFriends();
+    }
     public void areFriends(String info)
     {
         //This method receive the information from android and says if is a friend or not
         if (string.Equals(info, "true") || (!string.Equals(info, "null") && !string.Equals(info, "false")))
         {
+            using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+                {
+                    jo.Call("DAOController", "getPlans", this.idUser);
+
+                }
+            }
             //Son amigos
-            fillFriends();
             Debug.Log("Son amigos");
         }
         else
