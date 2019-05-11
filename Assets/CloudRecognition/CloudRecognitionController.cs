@@ -37,7 +37,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, false);
-        fillFriends();
+        //fillFriends();
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
@@ -118,8 +118,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         TextMeshPro userName = instance.transform.Find("Canvas/FriendPanel/UserName").GetComponent<TextMeshPro>();
         String name = this.jsonDetectedObject.GetField("name").str;
         userName.text = name;*/
-       /* RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
-        Utility.showHide(userPanel.gameObject, false);*/
+        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, false);
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, true);
         //string str = "{\"usersUrl_Film1\": {\"1\":\"https://drive.google.com/uc?export=download&id=1AZ279LzgZCbfkaasa3eKJzDUi-q0T1CI\",\"2\":\"https://drive.google.com/uc?export=download&id=1Hsoa9hy_RK6ddMdLSIsFXOfiNieS9KRa\",\"3\":\"https://drive.google.com/uc?export=download&id=11_ZRh-t9z1cAOLPaXErg9Uby-r7lxkDL\",\"4\":\"https://drive.google.com/uc?export=download&id=1AWP_iRqBDbbHVe3DugqQH9HrK3g8RgD_\",\"5\":\"https://drive.google.com/uc?export=download&id=1iRUr8ZY-xfgczAw9sWyMclMo_e5JQiIm\",\"6\":\"https://drive.google.com/uc?export=download&id=17qRydHbpDJ444O4ZjFtQVT8Oum7aOeCs\"},\"usersUrl_Film2\": {\"1\":\"https://drive.google.com/uc?export=download&id=1AZ279LzgZCbfkaasa3eKJzDUi-q0T1CI\",\"2\":\"https://drive.google.com/uc?export=download&id=1Hsoa9hy_RK6ddMdLSIsFXOfiNieS9KRa\",\"3\":\"https://drive.google.com/uc?export=download&id=1iRUr8ZY-xfgczAw9sWyMclMo_e5JQiIm\",\"4\":\"https://drive.google.com/uc?export=download&id=1AWP_iRqBDbbHVe3DugqQH9HrK3g8RgD_\",\"5\":\"https://drive.google.com/uc?export=download&id=11_ZRh-t9z1cAOLPaXErg9Uby-r7lxkDL\",\"6\":\"https://drive.google.com/uc?export=download&id=17qRydHbpDJ444O4ZjFtQVT8Oum7aOeCs\"},\"usersUrl_Film3\": {\"1\":\"https://drive.google.com/uc?export=download&id=1AZ279LzgZCbfkaasa3eKJzDUi-q0T1CI\",\"2\":\"https://drive.google.com/uc?export=download&id=1Hsoa9hy_RK6ddMdLSIsFXOfiNieS9KRa\",\"3\":\"https://drive.google.com/uc?export=download&id=11_ZRh-t9z1cAOLPaXErg9Uby-r7lxkDL\",\"4\":\"https://drive.google.com/uc?export=download&id=1AWP_iRqBDbbHVe3DugqQH9HrK3g8RgD_\",\"5\":\"https://drive.google.com/uc?export=download&id=1iRUr8ZY-xfgczAw9sWyMclMo_e5JQiIm\",\"6\":\"https://drive.google.com/uc?export=download&id=17qRydHbpDJ444O4ZjFtQVT8Oum7aOeCs\"},\"films\": {\"1\":\"https://drive.google.com/uc?export=download&id=1JT9Bcl6FimSqvejD3BNvVWmbv0t8mlVE\",\"2\":\"https://drive.google.com/uc?export=download&id=1RBiLM2II3tEXs-ZsdTSWroMu-xCzrbR2\",\"3\":\"https://drive.google.com/uc?export=download&id=1WqyyVvg56pSeCyC0KAtjZLmmekZ0hyi9\"},\"usersRatings_Film1\": {\"1\":8,\"2\":7,\"3\":6,\"4\":5,\"5\":4,\"6\":3},\"usersRatings_Film2\": {\"1\":1,\"2\":1,\"3\":1,\"4\":1,\"5\":1,\"6\":1},\"usersRatings_Film3\": {\"1\":5,\"2\":5,\"3\":5,\"4\":5,\"5\":5,\"6\":5}}";
@@ -160,15 +160,15 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion*10);
         }*/
         top = new Dictionary<int, plan_info>();
-        for (int i = 1; i <= 3; i++)
+        for (int i = 1; i <= json_def.list.Count; i++)
         {
             plan_info planAux = new plan_info();
             planAux.usersUrl = new ArrayList();
             planAux.notas = new ArrayList();
-            for(int j = 1; j <= 6; j++)
+            for(int j = 1; j <= json_def.list[i].GetField("value3").list.Count; j++)
             {
-                planAux.usersUrl.Add(json.GetField("usersUrl_Film" + (i)).GetField(j.ToString()).str);
-                planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
+                planAux.usersUrl.Add(json_def.list[i].GetField("value3").list[j].GetField("imageURL").str);
+               // planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
             }
             top.Add(i, planAux);
         }
@@ -398,8 +398,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         for (int i = 1; i <= 6; i++)
         {
             StartCoroutine(cargaImagen((string)top[3].usersUrl[i-1], this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
-            int puntuacion = (int) top[3].notas[i-1];
-            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+           /* int puntuacion = (int) top[3].notas[i-1];
+            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);*/
         }
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
         newDictionary.Add(1, top[3]);
@@ -427,8 +427,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         for (int i = 1; i <= 6; i++)
         {
             StartCoroutine(cargaImagen((string)top[2].usersUrl[i - 1], this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
-            int puntuacion = (int)top[2].notas[i - 1];
-            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+          /*  int puntuacion = (int)top[2].notas[i - 1];
+            this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);*/
         }
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
         newDictionary.Add(1, top[2]);
