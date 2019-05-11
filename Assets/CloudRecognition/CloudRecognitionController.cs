@@ -306,7 +306,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     }
     public void addFriend(String info)
     {
-        fillFriends(info);
+        areFriends(info);
     }
     private void comunication(String method, String _id)
     {
