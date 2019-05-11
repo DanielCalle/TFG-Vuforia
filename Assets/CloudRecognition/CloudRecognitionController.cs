@@ -20,6 +20,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private Boolean expand_clicked = false;
     private String idDetected;
     private String idUser = "";
+    private String idFilm = "";
 
     private struct plan_info
     {
@@ -274,12 +275,21 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
    
     public void infoClick()
     {
-        comunication("info", this.jsonDetectedObject.str);
+        using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            using (AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                jo.Call("DAOController", "infoFilm", this.idFilm);
+            }
+        }
     }
     public void getFilmById(String info)
     {
         //This method receive the information from android in case that the object is a film
         this.jsonDetectedObject = new JSONObject(info);
+        this.idFilm = jsonDetectedObject.GetField("id").ToString();
+
+
         fillFilmData();
     }
     public void getUserById(String info)
