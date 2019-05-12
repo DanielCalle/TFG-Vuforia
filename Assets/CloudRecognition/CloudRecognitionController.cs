@@ -25,7 +25,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private struct plan_info
     {
         public ArrayList usersUrl;
-        public ArrayList notas;
+        public int rate;
     }
     private Dictionary<int, plan_info> top;
     void Start()
@@ -144,6 +144,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
                 /*int puntuacion = int.Parse(json.GetField("usersRatings_Film1").GetField(i.ToString()).ToString(), System.Globalization.NumberStyles.Integer);
                 this.transform.Find("Canvas/FirstPosition/Friend" + i + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);*/
             }
+            int rate = int.Parse(json_def.list[0].GetField("value1").GetField("rating").ToString());
+            this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + rate * 10);
 
         }
 
@@ -161,12 +163,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             plan_info planAux = new plan_info();
             planAux.usersUrl = new ArrayList();
-            planAux.notas = new ArrayList();
             for(int j = 0; j < json_def.list[i].GetField("value3").list.Count; j++)
             {
                 planAux.usersUrl.Add(json_def.list[i].GetField("value3").list[j].GetField("imageURL").str);
                // planAux.notas.Add(int.Parse(json.GetField("usersRatings_Film" + (i)).GetField(j.ToString()).ToString(), System.Globalization.NumberStyles.Integer));
             }
+            json_def.list[i].GetField("value1").GetField("rating");
+            planAux.rate = int.Parse(json_def.list[i].GetField("value1").GetField("rating").ToString());
             top.Add(i, planAux);
         }
         for(int i = 0; i < top.Count; i++)
@@ -413,6 +416,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             StartCoroutine(cargaImagen((string)top[2].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i + 1)).GetComponent<UnityEngine.UI.Image>()));
         }
+        int puntuacion = (int)top[2].rate;
+        this.transform.Find("Canvas/FirstPosition/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
         /*
         for (int i = 1; i <= 6; i++)
         {
@@ -447,6 +452,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             StartCoroutine(cargaImagen((string)top[1].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
         }
+        int puntuacion = (int)top[1].rate;
+        this.transform.Find("Canvas/FirstPosition/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
         /*for (int i = 1; i <= 6; i++)
         {
             StartCoroutine(cargaImagen((string)top[2].usersUrl[i - 1], this.transform.Find("Canvas/FirstPosition/Friend" + i).GetComponent<UnityEngine.UI.Image>()));
