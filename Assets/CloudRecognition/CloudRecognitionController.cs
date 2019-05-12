@@ -408,6 +408,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         image3.sprite = image2Aux.sprite;
         Destroy(image2Aux);
 
+        resetUserImages();
         for (int i = 0; i < top[2].usersUrl.Count; i++)
         {
             StartCoroutine(cargaImagen((string)top[2].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i + 1)).GetComponent<UnityEngine.UI.Image>()));
@@ -441,7 +442,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         image3.sprite = image1.sprite;
         image1.sprite = image2Aux.sprite;
         Destroy(image2Aux);
-        for(int i = 0; i < top[1].usersUrl.Count; i++)
+        resetUserImages();
+        for (int i = 0; i < top[1].usersUrl.Count; i++)
         {
             StartCoroutine(cargaImagen((string)top[1].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
         }
@@ -456,6 +458,13 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         newDictionary.Add(1, top[2]);
         newDictionary.Add(2, top[0]);
         top = newDictionary;
+    }
+    private void resetUserImages()
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            this.transform.Find("Canvas/0/Friend" + (i+1) ).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("transparent");
+        }
     }
 
 }
