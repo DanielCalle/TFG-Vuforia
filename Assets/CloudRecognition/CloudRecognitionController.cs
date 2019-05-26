@@ -128,7 +128,6 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             {
                 StartCoroutine(cargaImagen(json_def.list[0].GetField("value3").list[i].GetField("value0").GetField("imageURL").str, this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
                 double rate_ = 0.0;
-                Debug.Log(json_def.list[0].GetField("value3").list[i].GetField("value1").str);
                 if (json_def.list[0].GetField("value3").list[i].GetField("value1") != null)
                 {
                     if (json_def.list[0].GetField("value3").list[i].GetField("value1").HasField("rating"))
@@ -155,12 +154,10 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             {
                 planAux.usersUrl.Add(json_def.list[i].GetField("value3").list[j].GetField("value0").GetField("imageURL").str);
                 double rate_ = 0.0;
-                if (json_def.list[i].GetField("value3").list[j].GetField("value1").str != null)
+                Debug.Log("antes del si" + json_def.list[0].GetField("value3").list[j].GetField("value1").HasField("rating"));
+                if (json_def.list[0].GetField("value3").list[j].GetField("value1").HasField("rating"))
                 {
-                    if (json_def.list[i].GetField("value3").list[j].GetField("value1").HasField("rating"))
-                    {
-                        rate_ = double.Parse(json_def.list[i].GetField("value3").list[j].GetField("value1").GetField("rating").ToString());
-                    }
+                    rate_ = double.Parse(json_def.list[i].GetField("value3").list[j].GetField("value1").GetField("rating").ToString());
                 }
                 planAux.ratings.Add(rate_);
                 
@@ -178,8 +175,16 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             planAux.ratings = new ArrayList();
             planAux.planID = -1;
             this.top.Add(this.top.Count, planAux);
-        }   
+        }
 
+        for(int i = 0; i < this.top.Count; i++)
+        {
+            for(int k = 0; k < this.top[i].ratings.Count; k++)
+            {
+                Debug.Log("diccionario " + i + this.top[i].ratings[k]);
+            }
+            
+        }
     }
     IEnumerator cargaImagen(String url, UnityEngine.UI.Image img)
     {
@@ -419,9 +424,11 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         for (int i = 0; i < this.top[2].usersUrl.Count; i++)
         {
             StartCoroutine(cargaImagen((string)this.top[2].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i + 1)).GetComponent<UnityEngine.UI.Image>()));
+            double puntuacion = (Double)this.top[2].ratings[i];
+            this.transform.Find("Canvas/0/Friend" + (i + 1) + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + Math.Round(puntuacion) * 10);
         }
-        int puntuacion = (int)top[2].ratings[0];
-        if(puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+        /*int puntuacion = (int)top[2].ratings[0];
+        if(puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);*/
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
         newDictionary.Add(0, this.top[2]);
         newDictionary.Add(1, this.top[0]);
@@ -448,29 +455,29 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         for (int i = 0; i < this.top[1].usersUrl.Count; i++)
         {
             StartCoroutine(cargaImagen((string)this.top[1].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
+            double puntuacion = (Double)this.top[1].ratings[i];
+            this.transform.Find("Canvas/0/Friend" + (i + 1) + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + Math.Round(puntuacion) * 10);
         }
-        int puntuacion = (int)this.top[1].ratings[0];
-        if (puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
+        /*int puntuacion = (int)this.top[1].ratings[0];
+        if (puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);*/
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
-        Debug.Log("POSICION 0" + this.top[0].ratings[0]);
+        /*Debug.Log("POSICION 0" + this.top[0].ratings[0]);
         Debug.Log("POSICION 1" + this.top[1].ratings[0]);
-        Debug.Log("POSICION 2" + this.top[2].ratings[0]);
+        Debug.Log("POSICION 2" + this.top[2].ratings[0]);*/
         newDictionary.Add(0, this.top[1]);
         newDictionary.Add(1, this.top[2]);
         newDictionary.Add(2, this.top[0]);
         this.top = newDictionary;
-        Debug.Log("POSICION 0" + this.top[0].ratings[0]);
+        /*Debug.Log("POSICION 0" + this.top[0].ratings[0]);
         Debug.Log("POSICION 1" + this.top[1].ratings[0]);
-        Debug.Log("POSICION 2" + this.top[2].ratings[0]);
+        Debug.Log("POSICION 2" + this.top[2].ratings[0]);*/
     }
     private void resetUserImages()
     {
         for(int i = 0; i < 6; i++)
         {
             this.transform.Find("Canvas/0/Friend" + (i+1) ).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("transparent");
+            this.transform.Find("Canvas/0/Friend" + (i + 1) +"/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("transparent");
         }
-        this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("transparent");
-        
     }
-
 }
