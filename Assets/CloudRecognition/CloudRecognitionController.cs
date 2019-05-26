@@ -26,7 +26,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     private struct plan_info
     {
         public ArrayList usersUrl;
-        public double rate;
+        public ArrayList ratings;
         public int planID;
     }
     private Dictionary<int, plan_info> top;
@@ -36,6 +36,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, false);
+        fillFriends("");
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
@@ -107,15 +108,15 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
     {
         //we know that is a friend
         //we hide the user panel
-        RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
-        Utility.showHide(userPanel.gameObject, false);
+        /*RectTransform userPanel = instance.transform.Find("Canvas/UserPanel").GetComponent<RectTransform>();
+        Utility.showHide(userPanel.gameObject, false);*/
         //we show the friend panel
         GameObject friendsCanvas = this.transform.Find("Canvas").GetComponent<Canvas>().gameObject;
         Utility.showHide(friendsCanvas, true);
         //we load the json with the information that comes from android
-        string definitivo = "[{\"value2\":{\"id\":5,\"uuid\":\"b1d63dd282174648a18b207057d9c177\",\"name\":\"El Rey LeÔö£Ôöén\",\"director\":\"Roger Allers\",\"trailerURL\":\"https://www.youtube.com/watch?v=xB5ceAruYrI\",\"infoURL\":null,\"synopsis\":\"Tras la muerte de su padre, Simba vuelve a enfrentar a su malvado tío, Scar, y reclamar el trono de rey.\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/the-lion-king.jpg\",\"genre\":\"Animation\",\"duration\":88,\"rating\":8.5,\"country\":\"USA\",\"premiere\":\"2019-02-07T23:00:00.000+0000\"},\"value3\":[{\"id\":2,\"uuid\":\"4c8048623944436699b3456fad3238d2\",\"name\":\"Diego\",\"email\":\"dacuna@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/diego.png\"},{\"id\":3,\"uuid\":\"6cac53efcd2e4caebcda9ea401d0e782\",\"name\":\"Daniel\",\"email\":\"dacalle@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/carlos.png\"}],\"value0\":{\"id\":64,\"creatorId\":3,\"filmId\":5,\"title\":\"Palomitas y leones\",\"date\":\"2019-06-20\",\"location\":\"Principe Pio\",\"description\":\"Muuuuuy prioritario😊\"},\"value1\":{\"userId\":2,\"filmId\":5,\"rating\":10,\"date\":\"2019-05-12T11:06:11.543+0000\"},\"size\":4}]";
-
-        JSONObject json_def = new JSONObject(info);
+        //string definitivo = "[{\"value2\":{\"id\":5,\"uuid\":\"b1d63dd282174648a18b207057d9c177\",\"name\":\"El Rey LeÔö£Ôöén\",\"director\":\"Roger Allers\",\"trailerURL\":\"https://www.youtube.com/watch?v=xB5ceAruYrI\",\"infoURL\":null,\"synopsis\":\"Tras la muerte de su padre, Simba vuelve a enfrentar a su malvado tío, Scar, y reclamar el trono de rey.\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/avengers-endgame.jpg\",\"genre\":\"Animation\",\"duration\":88,\"rating\":8.5,\"country\":\"USA\",\"premiere\":\"2019-02-07T23:00:00.000+0000\"},\"value3\":[{\"id\":2,\"uuid\":\"4c8048623944436699b3456fad3238d2\",\"name\":\"Diego\",\"email\":\"dacuna@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/diego.png\"},{\"id\":3,\"uuid\":\"6cac53efcd2e4caebcda9ea401d0e782\",\"name\":\"Daniel\",\"email\":\"dacalle@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/daniel.png\"},{\"id\":1,\"uuid\":\"596abcff71644f4eb855a2d372941674\",\"name\":\"Zihao\",\"email\":\"zhong@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/zihao.png\"}],\"value0\":{\"id\":64,\"creatorId\":3,\"filmId\":5,\"title\":\"Palomitas y leones\",\"date\":\"2019-06-20\",\"location\":\"Principe Pio\",\"description\":\"Muuuuuy prioritario\uD83D\uDE0A\"},\"value1\":{\"userId\":2,\"filmId\":5,\"rating\":10.0,\"date\":\"2019-05-12T11:06:11.543+0000\"},\"size\":4},{\"value2\":{\"id\":5,\"uuid\":\"b1d63dd282174648a18b207057d9c177\",\"name\":\"El Rey LeÔö£Ôöén\",\"director\":\"Roger Allers\",\"trailerURL\":\"https://www.youtube.com/watch?v=xB5ceAruYrI\",\"infoURL\":null,\"synopsis\":\"Tras la muerte de su padre, Simba vuelve a enfrentar a su malvado tío, Scar, y reclamar el trono de rey.\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/the-hunger-games.jpg\",\"genre\":\"Animation\",\"duration\":88,\"rating\":8.5,\"country\":\"USA\",\"premiere\":\"2019-02-07T23:00:00.000+0000\"},\"value3\":[{\"id\":2,\"uuid\":\"4c8048623944436699b3456fad3238d2\",\"name\":\"Diego\",\"email\":\"dacuna@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/diego.png\"},{\"id\":3,\"uuid\":\"6cac53efcd2e4caebcda9ea401d0e782\",\"name\":\"Daniel\",\"email\":\"dacalle@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/daniel.png\"}],\"value0\":{\"id\":64,\"creatorId\":3,\"filmId\":5,\"title\":\"Palomitas y leones\",\"date\":\"2019-06-20\",\"location\":\"Principe Pio\",\"description\":\"Muuuuuy prioritario😊\"},\"value1\":{\"userId\":2,\"filmId\":5,\"rating\":10,\"date\":\"2019-05-12T11:06:11.543+0000\"},\"size\":4},{\"value2\":{\"id\":5,\"uuid\":\"b1d63dd282174648a18b207057d9c177\",\"name\":\"El Rey LeÔö£Ôöén\",\"director\":\"Roger Allers\",\"trailerURL\":\"https://www.youtube.com/watch?v=xB5ceAruYrI\",\"infoURL\":null,\"synopsis\":\"Tras la muerte de su padre, Simba vuelve a enfrentar a su malvado tío, Scar, y reclamar el trono de rey.\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/the-lion-king.jpg\",\"genre\":\"Animation\",\"duration\":88,\"rating\":8.5,\"country\":\"USA\",\"premiere\":\"2019-02-07T23:00:00.000+0000\"},\"value3\":[{\"id\":2,\"uuid\":\"4c8048623944436699b3456fad3238d2\",\"name\":\"Diego\",\"email\":\"dacuna@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/diego.png\"},{\"id\":3,\"uuid\":\"6cac53efcd2e4caebcda9ea401d0e782\",\"name\":\"Daniel\",\"email\":\"dacalle@ucm.es\",\"password\":\"1234\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/carlos.png\"}],\"value0\":{\"id\":64,\"creatorId\":3,\"filmId\":5,\"title\":\"Palomitas y leones\",\"date\":\"2019-06-20\",\"location\":\"Principe Pio\",\"description\":\"Muuuuuy prioritario😊\"},\"value1\":{\"userId\":2,\"filmId\":5,\"rating\":10,\"date\":\"2019-05-12T11:06:11.543+0000\"},\"size\":4}]";
+        string definitivo = "[{\"value2\":{\"id\":14,\"uuid\":\"94c8b578a35043738c1b4aae1631adb0\",\"name\":\"Avengers: Endgame\",\"director\":\"Anthony Russo, Joe Russo\",\"trailerURL\":\"https://www.youtube.com/watch?v=TcMBFSGVi1c\",\"synopsis\":\"After the devastating events of Vengadores: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to undo Thanos' actions and restore order to the universe.\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/avengers-endgame.jpg\",\"genre\":\"Action, Adventure, Fantasy, Sci-Fi\",\"duration\":181,\"rating\":8.8,\"country\":\"USA\",\"premiere\":\"2019-04-25T02:00:00.000+0000\"},\"value3\":[{\"value0\":{\"id\":4,\"uuid\":\"0ef4e072b24744869bb1c1a238032a2c\",\"name\":\"Carlos\",\"email\":\"cargom11@ucm.es\",\"password\":\"carlos\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/carlos.png\"},\"value1\":{\"userId\":4,\"filmId\":14,\"rating\":10.0,\"date\":\"2019-05-26T08:25:55.052+0000\"},\"size\":2},{\"value0\":{\"id\":3,\"uuid\":\"6cac53efcd2e4caebcda9ea401d0e782\",\"name\":\"Daniel\",\"email\":\"dacalle@ucm.es\",\"password\":\"daniel\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/daniel.png\"},\"value1\":null,\"size\":2},{\"value0\":{\"id\":1,\"uuid\":\"596abcff71644f4eb855a2d372941674\",\"name\":\"Zihao\",\"email\":\"zhong@ucm.es\",\"password\":\"zihao\",\"imageURL\":\"http://filmar-develop.herokuapp.com/images/zihao.png\"},\"value1\":{\"userId\":1,\"filmId\":14,\"rating\":8.751913,\"date\":\"2019-05-26T08:25:54.675+0000\"},\"size\":2}],\"value0\":{\"id\":19,\"creatorId\":3,\"filmId\":14,\"title\":\"HOLA\",\"date\":\"2019-05-14\",\"location\":\"Narnia\",\"description\":\"ME ABURRO\"},\"value1\":{\"userId\":4,\"filmId\":14,\"rating\":10.0,\"date\":\"2019-05-26T08:25:55.052+0000\"},\"size\":4}]";
+        JSONObject json_def = new JSONObject(definitivo);
         //we take and show the information of the recommendation
         if (json_def.IsArray && json_def.list.Count > 0 )
         {
@@ -125,10 +126,22 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
             }
             for (int i = 0; i < json_def.list[0].GetField("value3").list.Count; i++)
             {
-                StartCoroutine(cargaImagen(json_def.list[0].GetField("value3").list[i].GetField("imageURL").str, this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
+                StartCoroutine(cargaImagen(json_def.list[0].GetField("value3").list[i].GetField("value0").GetField("imageURL").str, this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
+                double rate_ = 0.0;
+                Debug.Log(json_def.list[0].GetField("value3").list[i].GetField("value1").str);
+                if (json_def.list[0].GetField("value3").list[i].GetField("value1") != null)
+                {
+                    if (json_def.list[0].GetField("value3").list[i].GetField("value1").HasField("rating"))
+                    {
+                        rate_ = double.Parse(json_def.list[0].GetField("value3").list[i].GetField("value1").GetField("rating").ToString());
+                    }
+                }
+                this.transform.Find("Canvas/0/Friend" + (i + 1) + "/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + Math.Round(rate_) * 10);
+
             }
-            double rate = double.Parse(json_def.list[0].GetField("value1").GetField("rating").ToString());
-            this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + Math.Round(rate) * 10);
+            /*double rate = double.Parse(json_def.list[0].GetField("value1").GetField("rating").ToString());
+            this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + Math.Round(rate) * 10);*/
+            
 
         }
         //we save the information to change it by pressing the arrows
@@ -137,12 +150,23 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             plan_info planAux = new plan_info();
             planAux.usersUrl = new ArrayList();
+            planAux.ratings = new ArrayList();
             for(int j = 0; j < json_def.list[i].GetField("value3").list.Count; j++)
             {
-                planAux.usersUrl.Add(json_def.list[i].GetField("value3").list[j].GetField("imageURL").str);
+                planAux.usersUrl.Add(json_def.list[i].GetField("value3").list[j].GetField("value0").GetField("imageURL").str);
+                double rate_ = 0.0;
+                if (json_def.list[i].GetField("value3").list[j].GetField("value1").str != null)
+                {
+                    if (json_def.list[i].GetField("value3").list[j].GetField("value1").HasField("rating"))
+                    {
+                        rate_ = double.Parse(json_def.list[i].GetField("value3").list[j].GetField("value1").GetField("rating").ToString());
+                    }
+                }
+                planAux.ratings.Add(rate_);
+                
             }
             json_def.list[i].GetField("value1").GetField("rating");
-            planAux.rate = double.Parse(json_def.list[i].GetField("value1").GetField("rating").ToString());
+            //planAux.rate = double.Parse(json_def.list[i].GetField("value1").GetField("rating").ToString());
             planAux.planID = int.Parse(json_def.list[i].GetField("value0").GetField("id").ToString());
             this.top.Add(i, planAux);
         }
@@ -150,7 +174,8 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             plan_info planAux = new plan_info();
             planAux.usersUrl = new ArrayList();
-            planAux.rate = -1;
+            //planAux.rate = -1;
+            planAux.ratings = new ArrayList();
             planAux.planID = -1;
             this.top.Add(this.top.Count, planAux);
         }   
@@ -395,7 +420,7 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             StartCoroutine(cargaImagen((string)this.top[2].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i + 1)).GetComponent<UnityEngine.UI.Image>()));
         }
-        int puntuacion = (int)top[2].rate;
+        int puntuacion = (int)top[2].ratings[0];
         if(puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
         newDictionary.Add(0, this.top[2]);
@@ -424,19 +449,19 @@ public class CloudRecognitionController : MonoBehaviour, ICloudRecoEventHandler
         {
             StartCoroutine(cargaImagen((string)this.top[1].usersUrl[i], this.transform.Find("Canvas/0/Friend" + (i+1)).GetComponent<UnityEngine.UI.Image>()));
         }
-        int puntuacion = (int)this.top[1].rate;
+        int puntuacion = (int)this.top[1].ratings[0];
         if (puntuacion != -1) this.transform.Find("Canvas/0/Friend1/Gauge").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("Gauge/gauge" + puntuacion * 10);
         Dictionary<int, plan_info> newDictionary = new Dictionary<int, plan_info>();
-        Debug.Log("POSICION 0" + this.top[0].rate);
-        Debug.Log("POSICION 1" + this.top[1].rate);
-        Debug.Log("POSICION 2" + this.top[2].rate);
+        Debug.Log("POSICION 0" + this.top[0].ratings[0]);
+        Debug.Log("POSICION 1" + this.top[1].ratings[0]);
+        Debug.Log("POSICION 2" + this.top[2].ratings[0]);
         newDictionary.Add(0, this.top[1]);
         newDictionary.Add(1, this.top[2]);
         newDictionary.Add(2, this.top[0]);
         this.top = newDictionary;
-        Debug.Log("POSICION 0" + this.top[0].rate);
-        Debug.Log("POSICION 1" + this.top[1].rate);
-        Debug.Log("POSICION 2" + this.top[2].rate);
+        Debug.Log("POSICION 0" + this.top[0].ratings[0]);
+        Debug.Log("POSICION 1" + this.top[1].ratings[0]);
+        Debug.Log("POSICION 2" + this.top[2].ratings[0]);
     }
     private void resetUserImages()
     {
